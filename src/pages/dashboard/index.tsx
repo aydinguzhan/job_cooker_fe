@@ -4,7 +4,7 @@ import type { Post } from "../../types/post.types";
 const posts: Post[] = [
   {
     id: "1",
-    author: "Oğuzhan Aydın",
+    author: "deneme",
     title: "First Post",
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ".repeat(30),
