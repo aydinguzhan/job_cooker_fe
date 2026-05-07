@@ -27,6 +27,20 @@ export function getDecodedUser() {
   }
 }
 
+export  function userInfo() {
+  const decodedUser = localStorage.getItem("user")
+    ? JSON.parse(localStorage.getItem("user") as string)
+    : null;
+
+  if (!decodedUser) return null;
+  return {
+    userId: decodedUser.id,
+    email: decodedUser.email,
+    firstName: decodedUser.firstName,
+    lastName: decodedUser.lastName,
+  };
+}
+
 export function isTokenExpired() {
   const user = getDecodedUser();
 
@@ -34,7 +48,6 @@ export function isTokenExpired() {
 
   return Date.now() >= user.exp * 1000;
 }
-
 
 export function logout() {
   removeAccessToken();

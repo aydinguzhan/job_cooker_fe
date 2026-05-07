@@ -7,7 +7,6 @@ import RatingStars from "../../../components/ui/RaitingStarts";
 // };
 
 export default function SkillsSection({ skills }) {
-
   return (
     <section className="bg-white p-5 rounded-2xl shadow">
       <div className="flex flex-col gap-1 mb-5 sm:flex-row sm:items-end sm:justify-between">

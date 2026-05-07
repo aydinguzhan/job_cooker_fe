@@ -2,13 +2,8 @@ import { useState } from "react";
 import Input from "../../../components/ui/Input";
 import Button from "../../../components/ui/Button";
 import { PencilIcon, Save, X } from "lucide-react";
+import type { UserProfileHeader } from "../../../types/profile.types";
 
-type UserProfileHeader = {
-  firstName: string;
-  lastName: string;
-  title: string;
-  description: string;
-};
 
 type Props = {
   user: UserProfileHeader;
