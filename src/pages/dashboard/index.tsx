@@ -8,13 +8,16 @@ const posts: Post[] = [
     title: "First Post",
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ".repeat(30),
+    created_at: "02-05-2026",
   },
   {
     id: "2",
     author: "Admin User",
     title: "Dashboard Design",
-    description:
-      "We are building a LinkedIn-like feed card structure. ".repeat(25),
+    description: "We are building a LinkedIn-like feed card structure. ".repeat(
+      25,
+    ),
+    created_at: "02-05-2026",
   },
 ];
 

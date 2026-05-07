@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { UserRound } from "lucide-react";
+import { Bookmark, MessageCircle, ThumbsUp, UserRound } from "lucide-react";
 import type { Post } from "../../types/post.types";
+import Button from "../ui/Button";
 
 type PostCardProps = {
   post: Post;
@@ -13,7 +14,6 @@ export default function PostCard({ post }: PostCardProps) {
 
   const isLong = post.description.length > MAX_LENGTH;
 
-
   return (
     <article className="rounded-2xl border border-slate-200 bg-white shadow-sm">
       <header className="flex items-center gap-3 border-b border-slate-100 p-5">
@@ -24,6 +24,7 @@ export default function PostCard({ post }: PostCardProps) {
         <div>
           <p className="text-sm font-semibold text-slate-900">{post.author}</p>
           <p className="text-xs text-slate-500">Posted recently</p>
+          <p className=" text-xs font-light">{post.created_at}</p>
         </div>
       </header>
 
@@ -46,6 +47,21 @@ export default function PostCard({ post }: PostCardProps) {
             {isExpanded ? "Daha az göster" : "Daha fazla"}
           </button>
         )}
+      </div>
+      <div className="flex justify-start items-center p-4">
+        <div className="flex gap-4" >
+          <Button className="bg-white text-gray-500 hover:text-white">
+            <ThumbsUp />
+          </Button>
+
+          <Button className="bg-transparent hover:bg-white/10">
+            <MessageCircle className="text-cyan-400" />
+          </Button>
+
+          <Button className="bg-transparent hover:bg-white/10">
+            <Bookmark className="text-cyan-400" />
+          </Button>
+        </div>
       </div>
     </article>
   );

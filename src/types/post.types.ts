@@ -3,4 +3,5 @@ export type Post = {
   author: string;
   title: string;
   description: string;
+  created_at: string
 };

@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { LayoutDashboard, User } from "lucide-react";
 
+
 type SidebarProps = {
   isOpen: boolean;
 };
@@ -19,6 +20,7 @@ const menuItems = [
 ];
 
 export default function Sidebar({ isOpen }: SidebarProps) {
+
   return (
     <aside
       className={`h-screen shrink-0 overflow-hidden border-r border-slate-200 bg-white px-4 py-6 transition-all duration-300 ease-in-out ${
