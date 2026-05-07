@@ -1,24 +1,19 @@
+import { useEffect, useState } from "react";
 import PostCard from "../../components/posts/PostCard";
 import type { Post } from "../../types/post.types";
-
-const posts: Post[] = [
-  {
-    id: "1",
-    author: "deneme",
-    title: "First Post",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ".repeat(30),
-  },
-  {
-    id: "2",
-    author: "Admin User",
-    title: "Dashboard Design",
-    description:
-      "We are building a LinkedIn-like feed card structure. ".repeat(25),
-  },
-];
+import { getPostsFromUser } from "../../services/posts.service";
 
 export default function DashBoard() {
+  const [posts, setPosts] = useState<Post[]>([]);
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const data = await getPostsFromUser();
+      console.log(data)
+      setPosts(data);
+    };
+    fetchPosts();
+  }, []);
+
   return (
     <section>
       <div className="mx-auto mb-6 max-w-3xl">
