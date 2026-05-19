@@ -3,7 +3,7 @@ export type PostStatus = "draft" | "published" | "archived";
 export interface Post {
   id: string;
   user_id: string;
-
+  full_name: string;
   title: string;
   content: string;
 
@@ -11,6 +11,8 @@ export interface Post {
 
   created_at: string;
   updated_at: string;
+  islike: boolean;
+  comment_count:number
 }
 
 export interface GetPostResponse {
@@ -30,4 +32,20 @@ export interface PostModel {
 
   createdAt: string;
   updatedAt: string;
+}
+
+export interface PostCreatePayload {
+  title: string;
+  content: string;
+}
+
+export interface PostLike {
+  user_id: string;
+  post_id: string;
+}
+
+
+export interface CommentPayload{
+  post_id :string;
+  content :string
 }

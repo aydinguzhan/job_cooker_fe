@@ -1,67 +1,120 @@
-// profile.types.ts
-
-export type SkillLevel = 1 | 2 | 3 | 4 | 5;
-
-export interface ProfileImage {
-  url: string;
-  publicId?: string;
-  alt?: string;
-}
-
-export interface ProfileSkill {
+export type ProfileSkill = {
   id: string;
   name: string;
-  level: SkillLevel;
-}
+  short_key: string;
+  level: number;
+  status: string;
+};
 
-export interface ProfileExperience {
+export type ProfileExperience = {
   id: string;
-  role: string;
-  company: string;
+  profile_id: string;
+  company_name: string;
+  company_location: string | null;
+  position_title: string;
+  start_date: string;
+  end_date: string | null;
+  is_current: boolean;
+  description: string | null;
+  status: string;
+};
 
-  // API'den string geleceği için string tanımlıyoruz
-  startDate: string;
-  endDate: string | null;
+export type ProfileReference = {
+  id: string;
+  profile_id: string;
+  first_name: string;
+  last_name: string;
+  email: string | null;
+  phone: string | null;
+  company_name: string | null;
+  position_title: string | null;
+  status: string;
+};
 
-  isCurrent: boolean;
-  description: string;
-}
-
-export interface ProfileReference {
-  referenceId?: string;
-  name: string;
-  email: string;
-  title?: string;
-  company?: string;
-}
-
-export interface Profile {
-  _id: string;
-
-  userId: string;
-  email: string;
-
-  firstName: string;
-  lastName: string;
-
+export type Profile = {
+  id: string;
+  user_id: string;
+  first_name?: string;
+  last_name?: string;
   title: string;
-  description?: string;
-
-  profileImage?: ProfileImage;
-
+  bio_description: string | null;
+  profile_image_path: string | null;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
   skills: ProfileSkill[];
   experiences: ProfileExperience[];
   references: ProfileReference[];
+};
 
-  createdAt: string;
-  updatedAt: string;
-}
+export type CreateProfilePayload = {
+  user_id: string;
+  title: string;
+  bio_description: string;
+  profile_image_path?: string | null;
 
-export interface GetProfileResponse {
-  data: Profile;
-}
+  skills: {
+    skill_id: string;
+    level: number;
+  }[];
 
- export type UserProfileHeader = Pick<
-  Profile,
-  "firstName" | "lastName" | "title" | "description"
-> | null;
+  experiences: {
+    company_name: string;
+    company_location?: string | null;
+    position_title: string;
+    start_date: string;
+    end_date?: string | null;
+    is_current: boolean;
+    description?: string | null;
+  }[];
+
+  references: {
+    first_name: string;
+    last_name: string;
+    email?: string | null;
+    phone?: string | null;
+    company_name?: string | null;
+    position_title?: string | null;
+  }[];
+};
+
+export type UserProfilesInfo = {
+  title: string;
+  bio_description: string;
+};
+export type UpdateProfileSkillsPayload = {
+  skills: {
+    skill_id: string;
+    level: number;
+  }[];
+};
+export type UpdateProfileReferencesPayload = {
+  references: {
+    first_name: string;
+    last_name: string;
+    email?: string | null;
+    phone?: string | null;
+    company_name?: string | null;
+    position_title?: string | null;
+  }[];
+};
+
+export type UpdateProfileExperiencesPayload = {
+
+  experiences: {
+    company_name: string;
+    company_location?: string | null;
+    position_title: string;
+    start_date: string;
+    end_date?: string | null;
+    is_current: boolean;
+    description?: string | null;
+  }[];
+};
+
+export type SkillOption = {
+  id: string;
+  name: string;
+  short_key: string;
+};

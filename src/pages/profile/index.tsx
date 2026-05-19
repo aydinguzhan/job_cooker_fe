@@ -1,115 +1,121 @@
 import { useEffect, useState } from "react";
-import ExperienceSection from "./particals/ExperinceSection";
-import ProfileHeader from "./particals/ProfileHeader";
-import ReferencesSection from "./particals/ReferencesSetion";
-import SkillsSection from "./particals/SkillsSection";
-import { getUserProfile } from "../../services/profile.service";
-import type { Profile, UserProfileHeader } from "../../types/profile.types";
 import JobCookerLoader from "../../components/ui/Loader";
+import {
+  getUserProfile,
+  updatedUserInfo,
+  updateProfileExperiences,
+  updateProfileReferences,
+  updateProfileSkills,
+} from "../../services/profile.service";
+import type {
+  Profile as ProfileType,
+  SkillOption,
+} from "../../types/profile.types";
+import ProfileHeaderCard from "./particals/ProfileHeader";
+import SkillsCard from "./particals/SkillsCard";
+import ExperiencesCard from "./particals/ExperiencesCard";
+import ReferencesCard from "./particals/ReferencesCard";
+import EmptyProfileCard from "./particals/EmptyProfileCard";
+import { getSkills } from "../../services/global.service";
 
-// const user = {
-//   firstName: "Oğuzhan",
-//   lastName: "Aydın",
-//   title: "Fullstack JavaScript Developer",
-//   description:
-//     "React, TypeScript, Next.js ve Node.js ile modern web uygulamaları geliştiren yazılım geliştirici.",
-// };
-
-// // 🔥 Daha fazla veri ile test
-// const skills = [
-//   { name: "React.js", level: 5 },
-//   { name: "TypeScript", level: 5 },
-//   { name: "Next.js", level: 5 },
-//   { name: "Node.js", level: 4 },
-//   { name: "Express.js", level: 4 },
-//   { name: "NestJS", level: 3 },
-//   { name: "Tailwind CSS", level: 5 },
-//   { name: "SCSS", level: 4 },
-//   { name: "Redux", level: 4 },""
-//   { name: "Zustand", level: 3 },
-//   { name: "React Query", level: 4 },
-//   { name: "MySQL", level: 4 },
-//   { name: "PostgreSQL", level: 3 },
-//   { name: "MongoDB", level: 3 },
-//   { name: "Redis", level: 3 },
-//   { name: "Docker", level: 3 },
-//   { name: "Git", level: 5 },
-//   { name: "CI/CD", level: 3 },
-// ];
-
-// const experiences = [
-//   {
-//     role: "Senior Fullstack Developer",
-//     company: "Tech Corp",
-//     period: "2025 - Devam",
-//     description:
-//       "Yüksek trafikli sistemlerde performans optimizasyonu ve microservice mimarisi geliştirme.",
-//   },
-//   {
-//     role: "Fullstack Developer",
-//     company: "Lotec Technology",
-//     period: "2024 - 2025",
-//     description: "Next.js + Node.js ile enterprise uygulamalar geliştirme.",
-//   },
-//   {
-//     role: "Frontend Developer",
-//     company: "FONET",
-//     period: "2022 - 2023",
-//     description: "Kurumsal dashboard ve component mimarisi geliştirme.",
-//   },
-//   {
-//     role: "Junior Developer",
-//     company: "Startup XYZ",
-//     period: "2021 - 2022",
-//     description: "React öğrenme ve küçük feature geliştirmeleri.",
-//   },
-//   {
-//     role: "Intern",
-//     company: "Software House",
-//     period: "2020 - 2021",
-//     description: "Frontend temelleri ve UI geliştirme.",
-//   },
-// ];
-
-// const references = [
-//   { name: "Ahmet Yılmaz", email: "ahmet.yilmaz@example.com" },
-//   { name: "Ayşe Demir", email: "ayse.demir@example.com" },
-//   { name: "Mehmet Kaya", email: "mehmet@example.com" },
-// ];
- 
 export default function Profile() {
-  const [userData, setUserData] = useState<Profile | null>(null);
-  const [userInfo, setUserInfo] = useState<UserProfileHeader>(null);
+  const [profile, setProfile] = useState<ProfileType | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [editingSection, setEditingSection] = useState<
+    "header" | "skills" | "experiences" | "references" | null
+  >(null);
+  const [skillOptions, setSkillOptions] = useState<SkillOption[]>([]);
+
   useEffect(() => {
-   const getUserData = async () => {
-    setIsLoading(true);
-    const data = await getUserProfile();
-    setUserInfo({
-      firstName: data.firstName,
-      lastName: data.lastName,
-      title: data.title,
-      description: data.description,
-    });
-    setUserData(data);
-    setIsLoading(false);
-  };
+    async function fetchPageData() {
+      try {
+        setIsLoading(true);
 
-    getUserData();
+        const [profileData, skillsData] = await Promise.all([
+          getUserProfile(),
+          getSkills(),
+        ]);
+
+        setProfile(profileData);
+        setSkillOptions(skillsData);
+      } catch (error) {
+        console.error("Profile page data fetch error:", error);
+      } finally {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 2000);
+      }
+    }
+
+    fetchPageData();
   }, []);
-if (isLoading) {
-    return <JobCookerLoader />;
-  }
+
+  if (isLoading) return <JobCookerLoader />;
+
+  if (!profile) return <EmptyProfileCard />;
+
   return (
-    <main className="bg-gray-100 min-h-screen p-6">
-      <div className="max-w-6xl mx-auto space-y-6">
-        <ProfileHeader user={userInfo} onSave={(val) => console.log(val)} />
+    <main className="min-h-screen bg-slate-100 px-4 py-6 md:px-8">
+      <div className="mx-auto max-w-7xl space-y-6">
+        <ProfileHeaderCard
+          profile={profile}
+          isEditing={editingSection === "header"}
+          onEdit={() => setEditingSection("header")}
+          onCancel={() => setEditingSection(null)}
+          onSave={async (payload) => {
+            const updatedProfile = await updatedUserInfo(payload);
+            setProfile(updatedProfile);
+            setEditingSection(null);
+          }}
+        />
 
-        <SkillsSection skills={userData?.skills} />
+        <div className="grid grid-cols-1 gap-6 xl:grid-cols-[380px_minmax(0,1fr)]">
+          <aside className="space-y-6">
+            <SkillsCard
+              skills={profile.skills ?? []}
+              skillOptions={skillOptions}
+              isEditing={editingSection === "skills"}
+              onEdit={() => setEditingSection("skills")}
+              onCancel={() => setEditingSection(null)}
+              onSave={async (payload) => {
+                console.log("skills update payload:", payload);
+                setIsLoading(true);
+                const profile = await updateProfileSkills({ skills: payload });
+                setProfile(profile);
+                setIsLoading(false);
+                setEditingSection(null);
+              }}
+            />
 
-        <ExperienceSection experiences={userData?.experiences} />
+            <ReferencesCard
+              references={profile.references ?? []}
+              isEditing={editingSection === "references"}
+              onEdit={() => setEditingSection("references")}
+              onCancel={() => setEditingSection(null)}
+              onSave={async (payload) => {
+                setIsLoading(true);
+                const updatedProfile = await updateProfileReferences(payload);
+                setProfile(updatedProfile);
+                setIsLoading(false);
+                setEditingSection(null);
+              }}
+            />
+          </aside>
 
-        <ReferencesSection references={userData?.references} />
+          <section className="min-w-0">
+            <ExperiencesCard
+              experiences={profile.experiences ?? []}
+              isEditing={editingSection === "experiences"}
+              onEdit={() => setEditingSection("experiences")}
+              onCancel={() => setEditingSection(null)}
+              onSave={async (payload) => {
+                const updatedProfile = await updateProfileExperiences(payload);
+                setProfile(updatedProfile);
+                setEditingSection(null);
+              }}
+            />
+          </section>
+        </div>
       </div>
     </main>
   );
