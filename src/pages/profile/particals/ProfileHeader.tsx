@@ -1,6 +1,10 @@
 import { Camera, Check, Pencil, X } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { Profile } from "../../../types/profile.types";
+import {
+  resolveFileUrl,
+  uploadProfileImage,
+} from "../../../services/file.service";
 
 type HeaderPayload = {
   title: string;
@@ -13,7 +17,7 @@ type Props = {
   isEditing: boolean;
   onEdit: () => void;
   onCancel: () => void;
-  onSave: (payload: HeaderPayload) => void;
+  onSave: (payload: HeaderPayload) => void | Promise<void>;
 };
 
 export default function ProfileHeaderCard({
@@ -26,6 +30,11 @@ export default function ProfileHeaderCard({
   const [title, setTitle] = useState(profile.title);
   const [bio, setBio] = useState(profile.bio_description ?? "");
   const [imagePath, setImagePath] = useState(profile.profile_image_path ?? "");
+  const [isImageUploading, setIsImageUploading] = useState(false);
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const imageSrc = resolveFileUrl(imagePath);
 
   function handleEdit() {
     setTitle(profile.title);
@@ -41,12 +50,46 @@ export default function ProfileHeaderCard({
     onCancel();
   }
 
-  function handleSave() {
-    onSave({
+  async function handleSave() {
+    await onSave({
       title: title.trim(),
       bio_description: bio.trim(),
       profile_image_path: imagePath.trim() || null,
     });
+  }
+
+  async function handleImageSelect(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+
+    if (!file) return;
+
+    const previewUrl = URL.createObjectURL(file);
+    setImagePath(previewUrl);
+
+    try {
+      setIsImageUploading(true);
+
+      const uploaded = await uploadProfileImage(file);
+
+      setImagePath(uploaded.url);
+
+      await onSave({
+        title: title.trim(),
+        bio_description: bio.trim(),
+        profile_image_path: uploaded.url,
+      });
+    } catch (error) {
+      console.error("Profile image upload error:", error);
+      setImagePath(profile.profile_image_path ?? "");
+    } finally {
+      setIsImageUploading(false);
+
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+
+      URL.revokeObjectURL(previewUrl);
+    }
   }
 
   return (
@@ -57,10 +100,10 @@ export default function ProfileHeaderCard({
         <div className="flex flex-col gap-6 pt-6 lg:flex-row lg:items-start lg:justify-between">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
             <div className="-mt-24 shrink-0">
-              <div className="relative h-36 w-36 overflow-hidden rounded-[2rem] border-4 border-white bg-slate-100 shadow-lg">
-                {imagePath ? (
+              <div className="group relative h-36 w-36 overflow-hidden rounded-[2rem] border-4 border-white bg-slate-100 shadow-lg">
+                {imageSrc ? (
                   <img
-                    src={imagePath}
+                    src={imageSrc}
                     alt="Profile"
                     className="h-full w-full object-cover"
                   />
@@ -71,12 +114,28 @@ export default function ProfileHeaderCard({
                 )}
 
                 {isEditing && (
-                  <button
-                    type="button"
-                    className="absolute bottom-2 right-2 rounded-xl bg-slate-900 p-2 text-white"
-                  >
-                    <Camera className="h-4 w-4" />
-                  </button>
+                  <>
+                    <button
+                      type="button"
+                      disabled={isImageUploading}
+                      onClick={() => fileInputRef.current?.click()}
+                      className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-slate-950/60 text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100 disabled:cursor-not-allowed"
+                    >
+                      <Camera className="h-5 w-5" />
+
+                      <span className="text-sm font-semibold">
+                        {isImageUploading ? "Yükleniyor..." : "Düzenle"}
+                      </span>
+                    </button>
+
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageSelect}
+                      className="hidden"
+                    />
+                  </>
                 )}
               </div>
             </div>
@@ -107,7 +166,8 @@ export default function ProfileHeaderCard({
                 <button
                   type="button"
                   onClick={handleCancel}
-                  className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                  disabled={isImageUploading}
+                  className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   <X className="h-4 w-4" />
                   Cancel
@@ -116,7 +176,8 @@ export default function ProfileHeaderCard({
                 <button
                   type="button"
                   onClick={handleSave}
-                  className="inline-flex items-center gap-2 rounded-2xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
+                  disabled={isImageUploading}
+                  className="inline-flex items-center gap-2 rounded-2xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   <Check className="h-4 w-4" />
                   Save
@@ -163,16 +224,13 @@ export default function ProfileHeaderCard({
 
             {isEditing && (
               <div className="mt-5">
-                <label className="mb-2 block text-xs font-semibold text-slate-500">
-                  Profile image path
-                </label>
+                <p className="mb-2 text-xs font-semibold text-slate-500">
+                  Profile image
+                </p>
 
-                <input
-                  value={imagePath}
-                  onChange={(e) => setImagePath(e.target.value)}
-                  placeholder="/files/profile-images/..."
-                  className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-cyan-500"
-                />
+                <p className="break-all rounded-2xl bg-white px-4 py-3 text-xs text-slate-500">
+                  {imagePath || "No image selected"}
+                </p>
               </div>
             )}
           </div>
