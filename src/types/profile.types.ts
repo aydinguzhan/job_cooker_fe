@@ -82,6 +82,7 @@ export type CreateProfilePayload = {
 export type UserProfilesInfo = {
   title: string;
   bio_description: string;
+  profile_image_path?: string | null;
 };
 export type UpdateProfileSkillsPayload = {
   skills: {

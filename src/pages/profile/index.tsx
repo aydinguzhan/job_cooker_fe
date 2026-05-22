@@ -17,8 +17,14 @@ import ExperiencesCard from "./particals/ExperiencesCard";
 import ReferencesCard from "./particals/ReferencesCard";
 import EmptyProfileCard from "./particals/EmptyProfileCard";
 import { getSkills } from "../../services/global.service";
+import AiProfileGenerateModal, {
+  type AiProfilePreview,
+} from "../../components/layout/AiProfileGenerateModal";
+import apiClient from "../../lib/axios";
+import AiButton from "../../components/layout/AiButton";
 
 export default function Profile() {
+  const [isAiModalOpen, setIsAiModalOpen] = useState(false);
   const [profile, setProfile] = useState<ProfileType | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [editingSection, setEditingSection] = useState<
@@ -43,7 +49,7 @@ export default function Profile() {
       } finally {
         setTimeout(() => {
           setIsLoading(false);
-        }, 2000);
+        }, 1500);
       }
     }
 
@@ -53,9 +59,28 @@ export default function Profile() {
   if (isLoading) return <JobCookerLoader />;
 
   if (!profile) return <EmptyProfileCard />;
+  async function handleGenerateProfile(prompt: string) {
+    const { data } = await apiClient.post("/profile/ai-generated", {
+      prompt,
+    });
+
+    return data.data;
+  }
+  function handleUseAiProfile(profile: AiProfilePreview) {
+    console.log(profile);
+
+    setIsAiModalOpen(false);
+  }
 
   return (
     <main className="min-h-screen bg-slate-100 px-4 py-6 md:px-8">
+      <AiProfileGenerateModal
+        open={isAiModalOpen}
+        onClose={() => setIsAiModalOpen(false)}
+        onGenerate={handleGenerateProfile}
+        onUseProfile={handleUseAiProfile}
+      />
+      <AiButton onClick={() => setIsAiModalOpen(true)} />
       <div className="mx-auto max-w-7xl space-y-6">
         <ProfileHeaderCard
           profile={profile}
