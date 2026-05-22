@@ -14,9 +14,13 @@ export async function uploadProfileImage(
   const formData = new FormData();
   formData.append("image", file);
 
-  const user_id = userInfo().userId;
+  const currentUser = userInfo();
 
-  const response = await apiClient.post(`/files/profile/${user_id}/image`, formData, {
+  if (!currentUser?.userId) {
+    throw new Error("User information not found");
+  }
+
+  const response = await apiClient.post(`/files/profile/${currentUser.userId}/image`, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -44,7 +48,13 @@ export function getFileUrl(fileId?: string | null) {
 export function resolveFileUrl(path?: string | null) {
   if (!path) return "";
 
-  if (path.startsWith("http")) return path;
+  if (
+    path.startsWith("http") ||
+    path.startsWith("blob:") ||
+    path.startsWith("data:")
+  ) {
+    return path;
+  }
 
   return `${API_URL}${path}`;
 }
