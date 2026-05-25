@@ -7,7 +7,7 @@ import {
   MoreHorizontal,
   Send,
 } from "lucide-react";
-import type { Post, PostLike } from "../../types/post.types";
+import type { Post } from "../../types/post.types";
 import Button from "../ui/Button";
 import {
   createComment,
@@ -51,8 +51,8 @@ export default function PostCard({ post }: PostCardProps) {
     },
   ]);
 
-  async function handleLike(payload: PostLike) {
-    const result = await postLike(payload);
+  async function handleLike(postId: string) {
+    const result = await postLike(postId);
     setIsLiked((prev) => !prev);
     return result;
   }
@@ -144,9 +144,7 @@ export default function PostCard({ post }: PostCardProps) {
             variant={isLiked ? "secondary" : "outline"}
             fullWidth={false}
             className="flex-1 gap-2"
-            onClick={() =>
-              handleLike({ user_id: post.user_id, post_id: post.id })
-            }
+            onClick={() => handleLike(post.id)}
           >
             <ThumbsUp size={18} />
             <span>Like</span>

@@ -1,5 +1,7 @@
 import apiClient from "../lib/axios";
 import type {
+  AiProfilePreview,
+  CreateProfilePayload,
   Profile,
   UpdateProfileExperiencesPayload,
   UpdateProfileReferencesPayload,
@@ -12,6 +14,10 @@ export async function getUserProfile(): Promise<Profile> {
   return data.data;
 }
 
+export async function createProfile(payload: CreateProfilePayload) {
+  const { data } = await apiClient.post("/profile", payload);
+  return data.data;
+}
 
 export async function updatedUserInfo(payload: UserProfilesInfo) {
   const { data } = await apiClient.put("/profile/userInfo", payload);
@@ -33,5 +39,13 @@ export async function updateProfileExperiences(
   payload: UpdateProfileExperiencesPayload,
 ) {
   const { data } = await apiClient.put("/profile/experiences", payload);
+  return data.data;
+}
+
+export async function generateAiProfile(prompt: string): Promise<AiProfilePreview> {
+  const { data } = await apiClient.post("/profile/ai-generated", {
+    prompt,
+  });
+
   return data.data;
 }

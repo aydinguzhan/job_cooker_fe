@@ -1,4 +1,14 @@
-function StarIcon({ className = "", size = 16, filled }) {
+type StarIconProps = {
+  className?: string;
+  size?: number;
+  filled: boolean;
+};
+
+type RatingStarsProps = {
+  level: number;
+};
+
+function StarIcon({ className = "", size = 16, filled }: StarIconProps) {
   return (
     <svg
       width={size}
@@ -13,9 +23,7 @@ function StarIcon({ className = "", size = 16, filled }) {
     </svg>
   );
 }
-
-
-export default function RatingStars({ level }) {
+export default function RatingStars({ level }: RatingStarsProps) {
   return (
     <div className="flex gap-1 shrink-0">
       {Array.from({ length: 5 }).map((_, i) => (

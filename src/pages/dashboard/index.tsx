@@ -6,7 +6,7 @@ import PostCard from "../../components/posts/PostCard";
 import type { Post } from "../../types/post.types";
 
 import {
-  getPostsFromUser,
+  getDashboardFeed,
   postCreate,
 } from "../../services/posts.service";
 
@@ -17,7 +17,7 @@ export default function DashBoard() {
 
   const fetchPosts = async () => {
     try {
-      const data = await getPostsFromUser();
+      const data = await getDashboardFeed();
       setPosts(data);
     } catch (error) {
       console.log(error);
@@ -114,11 +114,11 @@ export default function DashBoard() {
       <div className="space-y-4">
         <div>
           <h2 className="text-xl font-semibold text-slate-900">
-            Latest Posts
+            Your Feed
           </h2>
 
           <p className="text-sm text-slate-500">
-            Discover what users are sharing
+            Kendi paylaşımların ve takip ettiğin kişilerin akışı
           </p>
         </div>
 

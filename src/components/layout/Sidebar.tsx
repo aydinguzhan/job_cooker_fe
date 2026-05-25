@@ -1,6 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { LayoutDashboard, User } from "lucide-react";
-
+import { LayoutDashboard, User, Users } from "lucide-react";
 
 type SidebarProps = {
   isOpen: boolean;
@@ -17,6 +16,11 @@ const menuItems = [
     path: "/profile",
     icon: User,
   },
+  {
+    label: "Network",
+    path: "/network",
+    icon: Users,
+  },
 ];
 
 export default function Sidebar({ isOpen }: SidebarProps) {
@@ -28,7 +32,9 @@ export default function Sidebar({ isOpen }: SidebarProps) {
       }`}
     >
       <div className="mb-8 flex h-8 items-center overflow-hidden px-2">
-        <span className="shrink-0 text-xl font-bold text-slate-900">JC</span>
+        <span className="shrink-0 text-xl font-bold text-slate-900">
+          <img src="/jobcooker-icon.svg" alt="Logo"  width={40} height={40}/>
+        </span>
 
         <span
           className={`ml-2 whitespace-nowrap text-xl font-bold text-slate-900 transition-all duration-200 ease-in-out ${

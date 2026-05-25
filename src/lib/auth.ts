@@ -27,18 +27,30 @@ export function getDecodedUser() {
   }
 }
 
-export  function userInfo() {
-  const decodedUser = localStorage.getItem("user")
-    ? JSON.parse(localStorage.getItem("user") as string)
-    : null;
+export function userInfo() {
+  const storedUser = localStorage.getItem("user");
 
-  if (!decodedUser) return null;
-  return {
-    userId: decodedUser.id,
-    email: decodedUser.email,
-    firstName: decodedUser.firstName,
-    lastName: decodedUser.lastName,
-  };
+  if (!storedUser) return null;
+
+  try {
+    const decodedUser = JSON.parse(storedUser) as {
+      id: string;
+      email: string;
+      firstName?: string;
+      lastName?: string;
+      first_name?: string;
+      last_name?: string;
+    };
+
+    return {
+      userId: decodedUser.id,
+      email: decodedUser.email,
+      firstName: decodedUser.firstName ?? decodedUser.first_name ?? "",
+      lastName: decodedUser.lastName ?? decodedUser.last_name ?? "",
+    };
+  } catch {
+    return null;
+  }
 }
 
 export function isTokenExpired() {

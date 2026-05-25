@@ -1,6 +1,8 @@
 import apiClient from "../lib/axios";
+import { userInfo } from "../lib/auth";
 import type {
   CommentPayload,
+  Post,
   PostCreatePayload,
   PostLike,
 } from "../types/post.types";
@@ -12,6 +14,17 @@ export async function getPostsFromUser() {
   return response.data.data;
 }
 
+export async function getDashboardFeed(limit = 20, offset = 0): Promise<Post[]> {
+  const response = await apiClient.get("/dashboard", {
+    params: {
+      limit,
+      offset,
+    },
+  });
+
+  return response.data.data;
+}
+
 export async function postCreate(payload: PostCreatePayload) {
   const user = localStorage.getItem("user");
   const { id } = user ? JSON.parse(user) : { id: null };
@@ -20,7 +33,19 @@ export async function postCreate(payload: PostCreatePayload) {
   }
   return { message: "User is not found." };
 }
-export async function postLike(payload: PostLike) {
+
+export async function postLike(post_id: string) {
+  const currentUser = userInfo();
+
+  if (!currentUser?.userId) {
+    throw new Error("User is not found.");
+  }
+
+  const payload: PostLike = {
+    user_id: currentUser.userId,
+    post_id,
+  };
+
   const result = await apiClient.post("/posts/like/change", payload);
   return result;
 }

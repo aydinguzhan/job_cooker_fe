@@ -49,7 +49,6 @@ export type Profile = {
 };
 
 export type CreateProfilePayload = {
-  user_id: string;
   title: string;
   bio_description: string;
   profile_image_path?: string | null;
@@ -77,6 +76,37 @@ export type CreateProfilePayload = {
     company_name?: string | null;
     position_title?: string | null;
   }[];
+};
+
+export type AiProfileSkill = {
+  skill_id: string;
+  name: string;
+  short_key: string;
+  level: number;
+};
+
+export type AiProfileExperience = {
+  role: string;
+  company: string | null;
+  startDate: string | null;
+  endDate: string | null;
+  isCurrent: boolean;
+  description: string;
+};
+
+export type AiProfileReference = {
+  name: string;
+  email: string | null;
+  title: string | null;
+  company: string | null;
+};
+
+export type AiProfilePreview = {
+  title: string;
+  bio_description: string;
+  skills: AiProfileSkill[];
+  experiences: AiProfileExperience[];
+  references: AiProfileReference[];
 };
 
 export type UserProfilesInfo = {
