@@ -7,6 +7,7 @@ import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import Profile from "../pages/profile";
 import DashBoard from "../pages/dashboard";
+import FollowsPage from "../pages/follows";
 import ProtectedRoute from "../components/router/ProtectedRouter";
 import PublicRoute from "../components/router/PublicRoute";
 import AppLayout from "../components/layout/Applayout";
@@ -50,6 +51,16 @@ const router = createBrowserRouter([
       <ProtectedRoute>
         <AppLayout>
           <DashBoard />
+        </AppLayout>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/network",
+    element: (
+      <ProtectedRoute>
+        <AppLayout>
+          <FollowsPage />
         </AppLayout>
       </ProtectedRoute>
     ),

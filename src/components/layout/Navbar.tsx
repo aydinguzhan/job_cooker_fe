@@ -1,6 +1,6 @@
-import { CircleChevronLeft, LogOut } from "lucide-react";
+import { CircleChevronLeft, LogOut, UserRound } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../../lib/auth";
+import { logout, userInfo } from "../../lib/auth";
 
 type NavbarProps = {
   onToggleSidebar: () => void;
@@ -12,6 +12,14 @@ export default function Navbar({
   isSidebarOpen,
 }: NavbarProps) {
   const navigate = useNavigate();
+  const currentUser = userInfo();
+  const fullName = [currentUser?.firstName, currentUser?.lastName]
+    .filter(Boolean)
+    .join(" ")
+    .trim();
+  const initials = `${currentUser?.firstName?.[0] ?? ""}${currentUser?.lastName?.[0] ?? ""}`
+    .toUpperCase()
+    .trim();
 
   const handleLogout = () => {
     logout();
@@ -38,13 +46,31 @@ export default function Navbar({
           <p className="text-xs text-slate-500">Welcome back</p>
         </div>
       </div>
-      <button
-        onClick={handleLogout}
-        className="flex items-center gap-2 rounded-lg bg-red-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-600"
-      >
-        <LogOut size={16} />
-        Logout
-      </button>
+
+      <div className="flex items-center gap-3">
+        <div className="hidden items-center gap-3 rounded-2xl border border-slate-200 px-3 py-2 sm:flex">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-sm font-semibold text-white">
+            {initials || <UserRound size={18} />}
+          </div>
+
+          <div className="min-w-0">
+            <p className="truncate text-sm font-semibold text-slate-900">
+              {fullName || "User"}
+            </p>
+            <p className="truncate text-xs text-slate-500">
+              {currentUser?.email || "No email"}
+            </p>
+          </div>
+        </div>
+
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-2 rounded-lg bg-red-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-600"
+        >
+          <LogOut size={16} />
+          Logout
+        </button>
+      </div>
     </header>
   );
 }

@@ -1,34 +1,6 @@
 import { Sparkles, Send, X, Loader2, UserRound, Briefcase, Star } from "lucide-react";
 import { useState } from "react";
-
-type AiSkill = {
-  name: string;
-  level: number;
-};
-
-type AiExperience = {
-  role: string;
-  company: string | null;
-  startDate: string | null;
-  endDate: string | null;
-  isCurrent: boolean;
-  description: string;
-};
-
-type AiReference = {
-  name: string;
-  email: string | null;
-  title: string | null;
-  company: string | null;
-};
-
-export type AiProfilePreview = {
-  title: string;
-  bio_description: string;
-  skills: AiSkill[];
-  experiences: AiExperience[];
-  references: AiReference[];
-};
+import type { AiProfilePreview } from "../../types/profile.types";
 
 type Props = {
   open: boolean;
