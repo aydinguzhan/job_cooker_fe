@@ -1,6 +1,7 @@
 import { CircleChevronLeft, LogOut, UserRound } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { logout, userInfo } from "../../lib/auth";
+import NotificationBell from "./Notification";
 
 type NavbarProps = {
   onToggleSidebar: () => void;
@@ -62,6 +63,7 @@ export default function Navbar({
             </p>
           </div>
         </div>
+        <NotificationBell />
 
         <button
           onClick={handleLogout}

@@ -11,6 +11,7 @@ import FollowsPage from "../pages/follows";
 import ProtectedRoute from "../components/router/ProtectedRouter";
 import PublicRoute from "../components/router/PublicRoute";
 import AppLayout from "../components/layout/Applayout";
+import PostDetailCard from "../pages/postDetail";
 
 const router = createBrowserRouter([
   {
@@ -61,6 +62,16 @@ const router = createBrowserRouter([
       <ProtectedRoute>
         <AppLayout>
           <FollowsPage />
+        </AppLayout>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/posts/detail/:postId",
+    element: (
+      <ProtectedRoute>
+        <AppLayout>
+          <PostDetailCard />
         </AppLayout>
       </ProtectedRoute>
     ),

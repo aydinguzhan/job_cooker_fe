@@ -7,7 +7,8 @@ import {
   MoreHorizontal,
   Send,
 } from "lucide-react";
-import type { Post } from "../../types/post.types";
+import { formatDateToDayMonthYear } from "../../lib/date";
+import type { Post, PostComment } from "../../types/post.types";
 import Button from "../ui/Button";
 import {
   createComment,
@@ -17,13 +18,6 @@ import {
 
 type PostCardProps = {
   post: Post;
-};
-
-type MockComment = {
-  id: string;
-  fullName: string;
-  content: string;
-  createdAt: string;
 };
 
 const MAX_LENGTH = 180;
@@ -36,20 +30,7 @@ export default function PostCard({ post }: PostCardProps) {
   const [showComments, setShowComments] = useState(false);
   const [commentText, setCommentText] = useState("");
   const [postCommentCount, setPostCommentCount] = useState(post.comment_count);
-  const [comments, setComments] = useState<MockComment[]>([
-    {
-      id: "1",
-      fullName: "Oğuzhan Aydın",
-      content: "Güzel bir paylaşım olmuş.",
-      createdAt: "Bugün",
-    },
-    {
-      id: "2",
-      fullName: "Test User",
-      content: "Bu konu hakkında daha fazla detay iyi olurdu.",
-      createdAt: "Dün",
-    },
-  ]);
+  const [comments, setComments] = useState<PostComment[]>([]);
 
   async function handleLike(postId: string) {
     const result = await postLike(postId);
@@ -58,17 +39,16 @@ export default function PostCard({ post }: PostCardProps) {
   }
   async function hadleGetComments(post_id: string,callback?:()=>void) {
     const results = await getAllComments(post_id);
-    setComments(results.data);
+    setComments(results);
+    setPostCommentCount(results.length);
     if(callback) callback()
   }
   async function handleAddComment() {
     if (!commentText.trim()) return;
     const newComment = await createComment({
       post_id: post.id,
-      content: commentText,
+      content: commentText.trim(),
     });
-    hadleGetComments(post.id);
-
     setComments((prev) => [newComment, ...prev]);
     setPostCommentCount((prev: number) => prev + 1);
     setCommentText("");
@@ -203,7 +183,10 @@ export default function PostCard({ post }: PostCardProps) {
 
           <div className="space-y-3">
             {comments.map((comment) => (
-              <div key={comment.id} className="flex gap-2">
+              <div
+                key={comment.id ?? `${comment.user_id}-${comment.created_at}`}
+                className="flex gap-2"
+              >
                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-slate-500 ring-1 ring-slate-200">
                   <UserRound size={16} />
                 </div>
@@ -211,10 +194,12 @@ export default function PostCard({ post }: PostCardProps) {
                 <div className="rounded-2xl bg-white px-4 py-2 ring-1 ring-slate-100">
                   <div className="mb-1 flex items-center gap-2">
                     <p className="text-xs font-semibold text-slate-800">
-                      {comment.fullName}
+                      {comment.full_name || comment.user_id}
                     </p>
                     <span className="text-[11px] text-slate-400">
-                      {comment.createdAt}
+                      {formatDateToDayMonthYear(comment.created_at, {
+                        includeTime: true,
+                      })}
                     </span>
                   </div>
 
