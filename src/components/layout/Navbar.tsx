@@ -1,6 +1,12 @@
-import { CircleChevronLeft, LogOut, UserRound } from "lucide-react";
+import { useEffect, useState } from "react";
+import { CircleChevronLeft, LogOut, Moon, Sun, UserRound } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { logout, userInfo } from "../../lib/auth";
+import { useTranslation } from "../../lang/useTranslation";
+import { resolveFileUrl } from "../../services/file.service";
+import { getUserProfile } from "../../services/profile.service";
+import { useTheme } from "../../theme/useTheme";
+import type { Profile } from "../../types/profile.types";
 import NotificationBell from "./Notification";
 
 type NavbarProps = {
@@ -13,7 +19,10 @@ export default function Navbar({
   isSidebarOpen,
 }: NavbarProps) {
   const navigate = useNavigate();
+  const { language, setLanguage, t } = useTranslation();
+  const { theme, toggleTheme } = useTheme();
   const currentUser = userInfo();
+  const [profile, setProfile] = useState<Profile | null>(null);
   const fullName = [currentUser?.firstName, currentUser?.lastName]
     .filter(Boolean)
     .join(" ")
@@ -21,6 +30,20 @@ export default function Navbar({
   const initials = `${currentUser?.firstName?.[0] ?? ""}${currentUser?.lastName?.[0] ?? ""}`
     .toUpperCase()
     .trim();
+  const imageSrc = resolveFileUrl(profile?.profile_image_path);
+
+  useEffect(() => {
+    async function fetchProfile() {
+      try {
+        const result = await getUserProfile();
+        setProfile(result);
+      } catch (error) {
+        console.error("Navbar profile fetch error:", error);
+      }
+    }
+
+    fetchProfile();
+  }, []);
 
   const handleLogout = () => {
     logout();
@@ -28,11 +51,11 @@ export default function Navbar({
   };
 
   return (
-    <header className="flex h-16 shrink-0 items-center justify-between border-b border-slate-200 bg-white px-6">
+    <header className="flex h-16 shrink-0 items-center justify-between border-b border-app bg-surface px-6 backdrop-blur-md">
       <div className="flex items-center gap-4">
         <button
           onClick={onToggleSidebar}
-          className="rounded-lg border border-slate-200 p-2 text-slate-600 transition hover:bg-slate-100"
+          className="rounded-lg border border-app bg-surface-elevated p-2 text-muted transition hover:bg-surface-strong hover:text-app"
         >
           <CircleChevronLeft
             size={22}
@@ -43,23 +66,70 @@ export default function Navbar({
         </button>
 
         <div>
-          <h1 className="text-lg font-semibold text-slate-900">Dashboard</h1>
-          <p className="text-xs text-slate-500">Welcome back</p>
+          <h1 className="text-lg font-semibold text-app">
+            {t("common.dashboard")}
+          </h1>
+          <p className="text-xs text-soft">{t("common.welcomeBack")}</p>
         </div>
       </div>
 
       <div className="flex items-center gap-3">
-        <div className="hidden items-center gap-3 rounded-2xl border border-slate-200 px-3 py-2 sm:flex">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-sm font-semibold text-white">
-            {initials || <UserRound size={18} />}
+        <button
+          type="button"
+          onClick={toggleTheme}
+          className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-app bg-surface-elevated text-muted transition hover:bg-surface-strong hover:text-app"
+        >
+          {theme === "light" ? (
+            <Moon className="h-4 w-4" />
+          ) : (
+            <Sun className="h-4 w-4" />
+          )}
+        </button>
+
+        <div className="hidden items-center rounded-xl border border-app bg-surface-muted p-1 sm:flex">
+          <button
+            type="button"
+            onClick={() => setLanguage("tr")}
+            className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition ${
+              language === "tr"
+                ? "bg-surface-elevated text-app shadow-sm"
+                : "text-soft hover:text-app"
+            }`}
+          >
+            {t("language.turkish")}
+          </button>
+          <button
+            type="button"
+            onClick={() => setLanguage("en")}
+            className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition ${
+              language === "en"
+                ? "bg-surface-elevated text-app shadow-sm"
+                : "text-soft hover:text-app"
+            }`}
+          >
+            {t("language.english")}
+          </button>
+        </div>
+
+        <div className="hidden items-center gap-3 rounded-2xl border border-app bg-surface-elevated px-3 py-2 sm:flex">
+          <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-slate-900 text-sm font-semibold text-white">
+            {imageSrc ? (
+              <img
+                src={imageSrc}
+                alt={fullName || t("common.user")}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              initials || <UserRound size={18} />
+            )}
           </div>
 
           <div className="min-w-0">
-            <p className="truncate text-sm font-semibold text-slate-900">
-              {fullName || "User"}
+            <p className="truncate text-sm font-semibold text-app">
+              {fullName || t("common.user")}
             </p>
-            <p className="truncate text-xs text-slate-500">
-              {currentUser?.email || "No email"}
+            <p className="truncate text-xs text-soft">
+              {currentUser?.email || t("common.noEmail")}
             </p>
           </div>
         </div>
@@ -70,7 +140,7 @@ export default function Navbar({
           className="flex items-center gap-2 rounded-lg bg-red-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-600"
         >
           <LogOut size={16} />
-          Logout
+          {t("common.logout")}
         </button>
       </div>
     </header>

@@ -14,18 +14,32 @@ import {
   createComment,
   getAllComments,
   postLike,
+  savePost,
+  unsavePost,
 } from "../../services/posts.service";
+import { useTranslation } from "../../lang/useTranslation";
+import { resolveFileUrl } from "../../services/file.service";
 
 type PostCardProps = {
   post: Post;
+  hideSaveAction?: boolean;
+  isInitiallySaved?: boolean;
+  onUnsaveSuccess?: (postId: string) => void;
 };
 
 const MAX_LENGTH = 180;
 
-export default function PostCard({ post }: PostCardProps) {
+export default function PostCard({
+  post,
+  hideSaveAction = false,
+  isInitiallySaved = false,
+  onUnsaveSuccess,
+}: PostCardProps) {
+  const { language, t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(false);
   const [isLiked, setIsLiked] = useState(post.islike);
-  const [isSaved, setIsSaved] = useState(false);
+  const [isSaved, setIsSaved] = useState(isInitiallySaved);
+  const [isActionMenuOpen, setIsActionMenuOpen] = useState(false);
 
   const [showComments, setShowComments] = useState(false);
   const [commentText, setCommentText] = useState("");
@@ -37,11 +51,29 @@ export default function PostCard({ post }: PostCardProps) {
     setIsLiked((prev) => !prev);
     return result;
   }
-  async function hadleGetComments(post_id: string,callback?:()=>void) {
+  async function handleSave(postId: string) {
+    if (isSaved) {
+      await unsavePost(postId);
+      setIsSaved(false);
+      onUnsaveSuccess?.(postId);
+      return;
+    }
+
+    await savePost(postId);
+    setIsSaved(true);
+  }
+
+  async function handleRemoveSavedPost() {
+    await unsavePost(post.id);
+    setIsSaved(false);
+    setIsActionMenuOpen(false);
+    onUnsaveSuccess?.(post.id);
+  }
+  async function hadleGetComments(post_id: string, callback?: () => void) {
     const results = await getAllComments(post_id);
     setComments(results);
     setPostCommentCount(results.length);
-    if(callback) callback()
+    if (callback) callback();
   }
   async function handleAddComment() {
     if (!commentText.trim()) return;
@@ -55,41 +87,70 @@ export default function PostCard({ post }: PostCardProps) {
   }
 
   const isLong = post.content.length > MAX_LENGTH;
-
-  const formattedDate = new Date(post.created_at).toLocaleDateString("tr-TR", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  });
+  const imageSrc = resolveFileUrl(post.profile_image_path);
+  const formattedDate = new Date(post.created_at).toLocaleDateString(
+    language === "tr" ? "tr-TR" : "en-US",
+    {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    }
+  );
 
   return (
-    <article className="overflow-hidden rounded-3xl border border-slate-200 bg-white">
-      <header className="flex items-center justify-between border-b border-slate-100 p-5">
+    <article className="overflow-hidden rounded-3xl border border-app bg-surface shadow-surface">
+      <header className="flex items-center justify-between border-b border-app p-5">
         <div className="flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-cyan-50 text-cyan-600 ring-1 ring-cyan-100">
-            <UserRound size={23} />
+          <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-cyan-50 text-cyan-600 ring-1 ring-cyan-100">
+            {imageSrc ? (
+              <img
+                src={imageSrc}
+                alt={post.full_name}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <UserRound size={23} />
+            )}
           </div>
 
           <div>
-            <p className="text-sm font-semibold text-slate-900">
+            <p className="text-sm font-semibold text-app">
               {post.full_name}
             </p>
-            <p className="text-xs text-slate-500">{formattedDate}</p>
+            <p className="text-xs text-soft">{formattedDate}</p>
           </div>
         </div>
 
-        <button className="rounded-full p-2 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700">
-          <MoreHorizontal size={20} />
-        </button>
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setIsActionMenuOpen((prev) => !prev)}
+            className="rounded-full p-2 text-soft transition hover:bg-surface-strong hover:text-app"
+          >
+            <MoreHorizontal size={20} />
+          </button>
+
+          {hideSaveAction && isActionMenuOpen ? (
+            <div className="absolute right-0 top-12 z-10 min-w-44 rounded-2xl border border-app bg-surface-elevated p-2 shadow-surface">
+              <button
+                type="button"
+                onClick={handleRemoveSavedPost}
+                className="flex w-full items-center rounded-xl px-3 py-2 text-left text-sm font-medium text-rose-600 transition hover:bg-rose-50"
+              >
+                {t("savedPosts.remove")}
+              </button>
+            </div>
+          ) : null}
+        </div>
       </header>
 
       <div className="p-5">
-        <h3 className="mb-3 text-xl font-bold tracking-tight text-slate-900">
+        <h3 className="mb-3 text-xl font-bold tracking-tight text-app">
           {post.title}
         </h3>
 
         <p
-          className={`text-sm leading-7 text-slate-600 transition-all duration-300 ${
+          className={`text-sm leading-7 text-muted transition-all duration-300 ${
             isExpanded ? "" : "line-clamp-3"
           }`}
         >
@@ -101,25 +162,29 @@ export default function PostCard({ post }: PostCardProps) {
             onClick={() => setIsExpanded((prev) => !prev)}
             className="mt-3 text-sm font-semibold text-cyan-600 transition hover:text-cyan-700"
           >
-            {isExpanded ? "Daha az göster" : "Daha fazla göster"}
+            {isExpanded ? t("postCard.showLess") : t("postCard.showMore")}
           </button>
         )}
       </div>
 
-      <div className="border-t border-slate-100 px-5 py-3">
+      <div className="border-t border-app px-5 py-3">
         <div
-          className="mb-3 flex items-center justify-between text-xs text-slate-500 hover:cursor-pointer"
+          className="mb-3 flex items-center justify-between text-xs text-soft hover:cursor-pointer"
           onClick={() =>
             hadleGetComments(post.id, () => {
               setShowComments((prev) => !prev);
             })
           }
         >
-          <span>{isLiked ? "1 kişi beğendi" : "Henüz beğeni yok"}</span>
-          <span>{postCommentCount} yorum</span>
+          <span>{isLiked ? t("postCard.oneLike") : t("postCard.noLikes")}</span>
+          <span>{t("postCard.commentsCount", { count: postCommentCount })}</span>
         </div>
 
-        <div className="grid grid-cols-3 gap-2">
+        <div
+          className={`grid gap-2 ${
+            hideSaveAction ? "grid-cols-2" : "grid-cols-3"
+          }`}
+        >
           <Button
             variant={isLiked ? "secondary" : "outline"}
             fullWidth={false}
@@ -127,47 +192,49 @@ export default function PostCard({ post }: PostCardProps) {
             onClick={() => handleLike(post.id)}
           >
             <ThumbsUp size={18} />
-            <span>Like</span>
+            <span>{t("common.like")}</span>
           </Button>
 
           <Button
             variant={showComments ? "secondary" : "outline"}
             fullWidth={false}
             className="flex-1 gap-2"
-            onClick={async() => {
+            onClick={async () => {
               await hadleGetComments(post.id);
               setShowComments((prev) => !prev);
             }}
           >
             <MessageCircle size={18} />
-            <span>Comment</span>
+            <span>{t("common.comment")}</span>
           </Button>
 
-          <Button
-            variant={isSaved ? "secondary" : "outline"}
-            fullWidth={false}
-            className="flex-1 gap-2"
-            onClick={() => setIsSaved((prev) => !prev)}
-          >
-            <Bookmark size={18} />
-            <span>Save</span>
-          </Button>
+          {!hideSaveAction ? (
+            <Button
+              variant={isSaved ? "secondary" : "outline"}
+              fullWidth={false}
+              className="flex-1 gap-2"
+              onClick={() => handleSave(post.id)}
+            >
+              <Bookmark size={18} />
+              <span>{t("common.save")}</span>
+            </Button>
+          ) : null}
         </div>
       </div>
 
       {showComments && (
-        <div className="border-t border-slate-100 bg-slate-50/50 px-5 py-4">
+        <div className="border-t border-app bg-surface-muted px-5 py-4">
           <div className="mb-4 flex items-center gap-2">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-slate-500 ring-1 ring-slate-200">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-surface-elevated text-soft ring-1 ring-[var(--border-color)]">
               <UserRound size={18} />
             </div>
 
-            <div className="flex flex-1 items-center rounded-full border border-slate-200 bg-white px-4 py-2">
+            <div className="flex flex-1 items-center rounded-full border border-app bg-surface-elevated px-4 py-2">
               <input
                 value={commentText}
                 onChange={(e) => setCommentText(e.target.value)}
-                placeholder="Yorum yaz..."
-                className="flex-1 bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400"
+                placeholder={t("postCard.commentPlaceholder")}
+                className="flex-1 bg-transparent text-sm text-app outline-none placeholder:text-soft"
               />
 
               <button
@@ -182,33 +249,47 @@ export default function PostCard({ post }: PostCardProps) {
           </div>
 
           <div className="space-y-3">
-            {comments.map((comment) => (
-              <div
-                key={comment.id ?? `${comment.user_id}-${comment.created_at}`}
-                className="flex gap-2"
-              >
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-slate-500 ring-1 ring-slate-200">
-                  <UserRound size={16} />
-                </div>
-
-                <div className="rounded-2xl bg-white px-4 py-2 ring-1 ring-slate-100">
-                  <div className="mb-1 flex items-center gap-2">
-                    <p className="text-xs font-semibold text-slate-800">
-                      {comment.full_name || comment.user_id}
-                    </p>
-                    <span className="text-[11px] text-slate-400">
-                      {formatDateToDayMonthYear(comment.created_at, {
-                        includeTime: true,
-                      })}
-                    </span>
+            {comments.length === 0 ? (
+              <div className="rounded-2xl bg-white px-4 py-5 text-center text-sm text-slate-500 ring-1 ring-slate-100">
+                {t("postCard.noComments")}
+              </div>
+            ) : (
+              comments.map((comment) => (
+                <div
+                  key={comment.id ?? `${comment.user_id}-${comment.created_at}`}
+                  className="flex gap-2"
+                >
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-surface-elevated text-soft ring-1 ring-[var(--border-color)]">
+                    {resolveFileUrl(comment.profile_image_path) ? (
+                      <img
+                        src={resolveFileUrl(comment.profile_image_path)}
+                        alt={comment.full_name || comment.user_id}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <UserRound size={16} />
+                    )}
                   </div>
 
-                  <p className="text-sm leading-6 text-slate-600">
-                    {comment.content}
-                  </p>
+                  <div className="rounded-2xl bg-surface-elevated px-4 py-2 ring-1 ring-[var(--border-color)]">
+                    <div className="mb-1 flex items-center gap-2">
+                      <p className="text-xs font-semibold text-app">
+                        {comment.full_name || comment.user_id}
+                      </p>
+                      <span className="text-[11px] text-soft">
+                        {formatDateToDayMonthYear(comment.created_at, {
+                          includeTime: true,
+                        })}
+                      </span>
+                    </div>
+
+                    <p className="text-sm leading-6 text-muted">
+                      {comment.content}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
       )}

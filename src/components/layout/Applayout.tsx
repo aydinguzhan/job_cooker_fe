@@ -16,7 +16,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-100">
+    <div className="flex h-screen overflow-hidden bg-app text-app">
       <Sidebar isOpen={isSidebarOpen} />
 
       <div className="flex min-w-0 flex-1 flex-col">
@@ -25,7 +25,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
           isSidebarOpen={isSidebarOpen}
         />
 
-        <main className="min-h-0 flex-1 overflow-y-auto p-6">
+        <main className="min-h-0 flex-1 overflow-y-auto bg-app p-6">
           {children}
         </main>
       </div>

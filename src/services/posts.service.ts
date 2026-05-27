@@ -27,6 +27,11 @@ export async function getDashboardFeed(limit = 20, offset = 0): Promise<Post[]> 
   return response.data.data;
 }
 
+export async function getSavedPosts(): Promise<Post[]> {
+  const response = await apiClient.get("/posts/save");
+  return response.data.data ?? [];
+}
+
 export async function getPostDetail(post_id: string): Promise<PostDetail> {
   const response = await apiClient.get(`/posts/detail/${post_id}`);
   return response.data.data;
@@ -65,4 +70,14 @@ export async function getAllComments(post_id: string): Promise<PostComment[]> {
 export async function createComment(payload: CommentPayload): Promise<PostComment> {
   const result = await apiClient.post("/posts/comment", payload);
   return result.data.data;
+}
+
+export async function savePost(post_id: string) {
+  const response = await apiClient.post(`/posts/save/${post_id}`);
+  return response.data.data;
+}
+
+export async function unsavePost(post_id: string) {
+  const response = await apiClient.put(`/posts/save/${post_id}`);
+  return response.data.data;
 }
