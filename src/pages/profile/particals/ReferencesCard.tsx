@@ -109,11 +109,11 @@ export default function ReferencesCard({
   const visibleReferences = isEditing ? localReferences : references;
 
   return (
-    <section className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm">
+    <section className="rounded-[2rem] border border-app bg-surface p-5 shadow-surface">
       <div className="mb-5 flex items-start justify-between gap-4">
         <div>
-          <h2 className="text-lg font-bold text-slate-950">References</h2>
-          <p className="text-sm text-slate-500">People who can refer you</p>
+          <h2 className="text-lg font-bold text-app">References</h2>
+          <p className="text-sm text-soft">People who can refer you</p>
         </div>
 
         {isEditing ? (
@@ -121,7 +121,7 @@ export default function ReferencesCard({
             <button
               type="button"
               onClick={handleCancel}
-              className="rounded-xl border border-slate-200 p-2 text-slate-600 hover:bg-slate-50"
+              className="rounded-xl border border-app p-2 text-muted hover:bg-surface-strong hover:text-app"
             >
               <X className="h-4 w-4" />
             </button>
@@ -138,7 +138,7 @@ export default function ReferencesCard({
           <button
             type="button"
             onClick={handleEdit}
-            className="rounded-xl border border-slate-200 p-2 text-slate-600 hover:bg-slate-50"
+            className="rounded-xl border border-app p-2 text-muted hover:bg-surface-strong hover:text-app"
           >
             <Pencil className="h-4 w-4" />
           </button>
@@ -147,7 +147,7 @@ export default function ReferencesCard({
 
       <div className="space-y-3">
         {visibleReferences.length === 0 && (
-          <p className="rounded-2xl bg-slate-50 p-4 text-sm text-slate-500">
+          <p className="rounded-2xl bg-surface-muted p-4 text-sm text-soft">
             No references added yet.
           </p>
         )}
@@ -155,7 +155,7 @@ export default function ReferencesCard({
         {visibleReferences.map((ref) => (
           <article
             key={ref.id}
-            className="relative rounded-2xl border border-slate-100 bg-slate-50 p-4"
+            className="relative rounded-2xl border border-app bg-surface-muted p-4"
           >
             {isEditing && (
               <button
@@ -176,7 +176,7 @@ export default function ReferencesCard({
                       updateReference(ref.id, "first_name", e.target.value)
                     }
                     placeholder="First name"
-                    className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-cyan-500"
+                    className="rounded-2xl border border-app bg-surface-elevated px-4 py-3 text-sm text-app outline-none focus:border-cyan-500"
                   />
 
                   <input
@@ -185,7 +185,7 @@ export default function ReferencesCard({
                       updateReference(ref.id, "last_name", e.target.value)
                     }
                     placeholder="Last name"
-                    className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-cyan-500"
+                    className="rounded-2xl border border-app bg-surface-elevated px-4 py-3 text-sm text-app outline-none focus:border-cyan-500"
                   />
                 </div>
 
@@ -195,7 +195,7 @@ export default function ReferencesCard({
                     updateReference(ref.id, "position_title", e.target.value)
                   }
                   placeholder="Position title"
-                  className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-cyan-500"
+                  className="w-full rounded-2xl border border-app bg-surface-elevated px-4 py-3 text-sm text-app outline-none focus:border-cyan-500"
                 />
 
                 <input
@@ -204,7 +204,7 @@ export default function ReferencesCard({
                     updateReference(ref.id, "company_name", e.target.value)
                   }
                   placeholder="Company name"
-                  className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-cyan-500"
+                  className="w-full rounded-2xl border border-app bg-surface-elevated px-4 py-3 text-sm text-app outline-none focus:border-cyan-500"
                 />
 
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -214,7 +214,7 @@ export default function ReferencesCard({
                       updateReference(ref.id, "email", e.target.value)
                     }
                     placeholder="Email"
-                    className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-cyan-500"
+                    className="rounded-2xl border border-app bg-surface-elevated px-4 py-3 text-sm text-app outline-none focus:border-cyan-500"
                   />
 
                   <input
@@ -223,27 +223,27 @@ export default function ReferencesCard({
                       updateReference(ref.id, "phone", e.target.value)
                     }
                     placeholder="Phone"
-                    className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-cyan-500"
+                    className="rounded-2xl border border-app bg-surface-elevated px-4 py-3 text-sm text-app outline-none focus:border-cyan-500"
                   />
                 </div>
               </div>
             ) : (
               <div className="flex gap-3 pr-12">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-white">
-                  <UserRound className="h-5 w-5 text-slate-600" />
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-surface-elevated">
+                  <UserRound className="h-5 w-5 text-muted" />
                 </div>
 
                 <div className="min-w-0">
-                  <h3 className="truncate font-bold text-slate-900">
+                  <h3 className="truncate font-bold text-app">
                     {ref.first_name} {ref.last_name}
                   </h3>
 
-                  <p className="truncate text-sm text-slate-500">
+                  <p className="truncate text-sm text-soft">
                     {ref.position_title}
                     {ref.company_name ? ` · ${ref.company_name}` : ""}
                   </p>
 
-                  <div className="mt-3 space-y-2 text-sm text-slate-500">
+                  <div className="mt-3 space-y-2 text-sm text-soft">
                     {ref.email && (
                       <p className="flex items-center gap-2">
                         <Mail className="h-4 w-4" />
@@ -268,7 +268,7 @@ export default function ReferencesCard({
           <button
             type="button"
             onClick={addReference}
-            className="flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-slate-300 py-3 text-sm font-semibold text-slate-600 hover:bg-slate-50"
+            className="flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-app py-3 text-sm font-semibold text-muted hover:bg-surface-strong hover:text-app"
           >
             <Plus className="h-4 w-4" />
             Add Reference

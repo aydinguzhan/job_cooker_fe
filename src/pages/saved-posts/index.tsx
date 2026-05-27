@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import SavedPostsList from "../../components/posts/SavedPostsList";
-import JobCookerLoader from "../../components/ui/Loader";
+import SavedPostsPageSkeleton from "../../components/spinner/SavedPostsPageSkeleton";
 import { useTranslation } from "../../lang/useTranslation";
 import { getSavedPosts } from "../../services/posts.service";
 import type { Post } from "../../types/post.types";
@@ -29,7 +29,7 @@ export default function SavedPostsPage() {
     fetchSavedPosts();
   }, [t]);
 
-  if (isLoading) return <JobCookerLoader />;
+  if (isLoading) return <SavedPostsPageSkeleton />;
 
   return (
     <section className="space-y-6">

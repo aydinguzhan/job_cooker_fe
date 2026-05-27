@@ -40,8 +40,16 @@ const onSubmit = async (values: RegisterFormValues) => {
 
   return (
     <AuthLayout
+      eyebrow={t("auth.registerEyebrow")}
       title={t("auth.registerTitle")}
       description={t("auth.registerDescription")}
+      asideTitle={t("auth.registerAsideTitle")}
+      asideDescription={t("auth.registerAsideDescription")}
+      highlights={[
+        t("auth.highlightOne"),
+        t("auth.highlightTwo"),
+        t("auth.highlightThree"),
+      ]}
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -83,9 +91,9 @@ const onSubmit = async (values: RegisterFormValues) => {
         </Button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-slate-500">
+      <p className="mt-6 text-center text-sm text-slate-300">
         {t("auth.haveAccount")}{" "}
-        <Link to="/login" className="font-medium text-slate-900">
+        <Link to="/login" className="font-medium text-white">
           {t("auth.login")}
         </Link>
       </p>

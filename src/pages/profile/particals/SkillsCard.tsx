@@ -105,11 +105,11 @@ export default function SkillsCard({
   const visibleSkills = isEditing ? localSkills : skills;
 
   return (
-    <section className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm">
+    <section className="rounded-[2rem] border border-app bg-surface p-5 shadow-surface">
       <div className="mb-5 flex items-start justify-between gap-4">
         <div>
-          <h2 className="text-lg font-bold text-slate-950">Skills</h2>
-          <p className="text-sm text-slate-500">Your technical stack</p>
+          <h2 className="text-lg font-bold text-app">Skills</h2>
+          <p className="text-sm text-soft">Your technical stack</p>
         </div>
 
         {isEditing ? (
@@ -117,7 +117,7 @@ export default function SkillsCard({
             <button
               type="button"
               onClick={handleCancel}
-              className="rounded-xl border border-slate-200 p-2 text-slate-600 hover:bg-slate-50"
+              className="rounded-xl border border-app p-2 text-muted hover:bg-surface-strong hover:text-app"
             >
               <X className="h-4 w-4" />
             </button>
@@ -134,7 +134,7 @@ export default function SkillsCard({
           <button
             type="button"
             onClick={handleEdit}
-            className="rounded-xl border border-slate-200 p-2 text-slate-600 hover:bg-slate-50"
+            className="rounded-xl border border-app p-2 text-muted hover:bg-surface-strong hover:text-app"
           >
             <Pencil className="h-4 w-4" />
           </button>
@@ -154,7 +154,7 @@ export default function SkillsCard({
 
       <div className="space-y-3">
         {visibleSkills.length === 0 && (
-          <p className="rounded-2xl bg-slate-50 p-4 text-sm text-slate-500">
+          <p className="rounded-2xl bg-surface-muted p-4 text-sm text-soft">
             No skills added yet.
           </p>
         )}
@@ -162,7 +162,7 @@ export default function SkillsCard({
         {visibleSkills.map((skill) => (
           <div
             key={skill.id}
-            className="relative rounded-2xl border border-slate-100 bg-slate-50 p-4"
+            className="relative rounded-2xl border border-app bg-surface-muted p-4"
           >
             {isEditing && (
               <button
@@ -176,10 +176,10 @@ export default function SkillsCard({
 
             <div className="flex items-center justify-between gap-3 pr-12">
               <div className="min-w-0">
-                <p className="truncate font-semibold text-slate-800">
+                <p className="truncate font-semibold text-app">
                   {skill.name}
                 </p>
-                <p className="text-xs text-slate-500">{skill.short_key}</p>
+                <p className="text-xs text-soft">{skill.short_key}</p>
               </div>
 
               <div className="flex shrink-0 gap-1">
@@ -199,7 +199,7 @@ export default function SkillsCard({
                         className={`h-4 w-4 ${
                           active
                             ? "fill-amber-400 text-amber-400"
-                            : "text-slate-300"
+                            : "text-soft/40"
                         }`}
                       />
                     </button>

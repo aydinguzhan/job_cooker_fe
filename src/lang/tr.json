@@ -16,7 +16,8 @@
     "status": "Durum",
     "follow": "Takip Et",
     "unfollow": "Takibi Birak",
-    "network": "Network"
+    "network": "Network",
+    "secureArea": "Guvenli alan"
   },
   "language": {
     "turkish": "TR",
@@ -27,6 +28,15 @@
     "loginDescription": "Hesabina devam etmek icin giris yap",
     "registerTitle": "Hesap Olustur",
     "registerDescription": "Uygulamayi kullanmaya baslamak icin kayit ol",
+    "loginEyebrow": "Hos Geldin",
+    "registerEyebrow": "Yeni Baslangic",
+    "loginAsideTitle": "Kariyer akisini tek panelden yonet.",
+    "loginAsideDescription": "Baglantilarini buyut, paylasimlarini yonet ve profesyonel gorunurlugunu tek bir ritimde tut.",
+    "registerAsideTitle": "Profesyonel profilini daha guclu bir ilk adimla kur.",
+    "registerAsideDescription": "Kendini tanit, networkunu insa et ve paylasimlarini daha tutarli bir dijital vitrine donustur.",
+    "highlightOne": "Profil, network ve paylasimlar ayni deneyimde bulusur.",
+    "highlightTwo": "Kaydettigin iceriklere, takip akisina ve kariyer alanina hizlica don.",
+    "highlightThree": "Sade, hizli ve guven veren bir profesyonel alan hazirla.",
     "email": "E-posta",
     "password": "Sifre",
     "firstName": "Ad",

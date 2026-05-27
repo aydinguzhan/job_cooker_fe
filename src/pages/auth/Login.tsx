@@ -37,8 +37,16 @@ const onSubmit = async (values: LoginFormValues) => {
 
   return (
     <AuthLayout
+      eyebrow={t("auth.loginEyebrow")}
       title={t("auth.loginTitle")}
       description={t("auth.loginDescription")}
+      asideTitle={t("auth.loginAsideTitle")}
+      asideDescription={t("auth.loginAsideDescription")}
+      highlights={[
+        t("auth.highlightOne"),
+        t("auth.highlightTwo"),
+        t("auth.highlightThree"),
+      ]}
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <Input
@@ -62,9 +70,9 @@ const onSubmit = async (values: LoginFormValues) => {
         </Button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-slate-500">
+      <p className="mt-6 text-center text-sm text-slate-300">
         {t("auth.noAccount")}{" "}
-        <Link to="/register" className="font-medium text-slate-900">
+        <Link to="/register" className="font-medium text-white">
           {t("auth.register")}
         </Link>
       </p>
