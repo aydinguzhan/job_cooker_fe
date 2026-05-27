@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Send } from "lucide-react";
 
 import PostCard from "../../components/posts/PostCard";
+import DashboardPageSkeleton from "../../components/spinner/DashboardPageSkeleton";
 
 import { useTranslation } from "../../lang/useTranslation";
 import type { Post } from "../../types/post.types";
@@ -14,15 +15,19 @@ import {
 export default function DashBoard() {
   const { t } = useTranslation();
   const [posts, setPosts] = useState<Post[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
   const fetchPosts = async () => {
     try {
+      setIsLoading(true);
       const data = await getDashboardFeed();
       setPosts(data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -50,6 +55,10 @@ export default function DashBoard() {
   };
 
   const isDisabled = !title.trim() || !content.trim();
+
+  if (isLoading) {
+    return <DashboardPageSkeleton />;
+  }
 
   return (
     <section className="mx-auto max-w-3xl space-y-6">

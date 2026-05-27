@@ -16,7 +16,8 @@
     "status": "Status",
     "follow": "Follow",
     "unfollow": "Unfollow",
-    "network": "Network"
+    "network": "Network",
+    "secureArea": "Secure area"
   },
   "language": {
     "turkish": "TR",
@@ -27,6 +28,15 @@
     "loginDescription": "Login to continue your account",
     "registerTitle": "Create Account",
     "registerDescription": "Register to start using the app",
+    "loginEyebrow": "Welcome",
+    "registerEyebrow": "New Start",
+    "loginAsideTitle": "Manage your career flow from one panel.",
+    "loginAsideDescription": "Grow your network, manage your posts, and keep your professional visibility steady in one focused rhythm.",
+    "registerAsideTitle": "Build your professional profile with a stronger first step.",
+    "registerAsideDescription": "Introduce yourself, grow your network, and turn your activity into a more consistent digital showcase.",
+    "highlightOne": "Profile, network, and content come together in one experience.",
+    "highlightTwo": "Return quickly to saved content, follow flow, and your career space.",
+    "highlightThree": "Prepare a professional space that feels simple, fast, and trustworthy.",
     "email": "Email",
     "password": "Password",
     "firstName": "First name",

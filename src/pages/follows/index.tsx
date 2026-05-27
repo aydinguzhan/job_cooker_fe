@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import FollowsTabs from "../../components/follows/FollowsTabs";
 import FollowUserCard from "../../components/follows/FollowUserCard";
-import JobCookerLoader from "../../components/ui/Loader";
+import NetworkPageSkeleton from "../../components/spinner/NetworkPageSkeleton";
 import { useTranslation } from "../../lang/useTranslation";
 import {
   followUser,
@@ -159,12 +159,12 @@ export default function FollowsPage() {
     },
   }[activeTab];
 
-  if (isLoading) return <JobCookerLoader />;
+  if (isLoading) return <NetworkPageSkeleton />;
 
   return (
-    <main className="min-h-screen bg-[linear-gradient(180deg,#f8fafc_0%,#eef6ff_38%,#f8fafc_100%)] px-4 py-6 md:px-8">
+    <main className="min-h-screen bg-app px-4 py-6 md:px-8">
       <div className="mx-auto max-w-7xl space-y-6">
-        <section className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm">
+        <section className="overflow-hidden rounded-[2rem] border border-app bg-surface shadow-surface">
           <div className="bg-[radial-gradient(circle_at_top_right,_rgba(34,211,238,0.28),_transparent_28%),radial-gradient(circle_at_left,_rgba(59,130,246,0.22),_transparent_30%),linear-gradient(135deg,#082f49_0%,#0f172a_58%,#111827_100%)] px-6 py-8 text-white md:px-8">
             <p className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-200">
               {t("follows.heroEyebrow")}
@@ -201,22 +201,22 @@ export default function FollowsPage() {
 
         <FollowsTabs activeTab={activeTab} counts={counts} onChange={setActiveTab} />
 
-        <section className="rounded-[2rem] border border-slate-200/80 bg-white/90 p-5 shadow-[0_20px_50px_-34px_rgba(15,23,42,0.25)] backdrop-blur">
-          <div className="mb-5 flex flex-col gap-3 border-b border-slate-100 pb-5 lg:flex-row lg:items-end lg:justify-between">
+        <section className="rounded-[2rem] border border-app bg-surface p-5 shadow-surface backdrop-blur">
+          <div className="mb-5 flex flex-col gap-3 border-b border-app pb-5 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-700">
                 {t("follows.activeView")}
               </p>
-              <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">
+              <h2 className="mt-2 text-2xl font-semibold tracking-tight text-app">
                 {activeTabMeta.title}
               </h2>
-              <p className="mt-1 max-w-2xl text-sm leading-6 text-slate-500">
+              <p className="mt-1 max-w-2xl text-sm leading-6 text-soft">
                 {activeTabMeta.description}
               </p>
             </div>
 
-            <div className="rounded-2xl bg-slate-50 px-4 py-3 text-sm text-slate-600 ring-1 ring-slate-100">
-              <span className="font-semibold text-slate-900">
+            <div className="rounded-2xl bg-surface-muted px-4 py-3 text-sm text-muted ring-1 ring-[var(--border-color)]">
+              <span className="font-semibold text-app">
                 {t("follows.showingUsers", { count: visibleUsers.length })}
               </span>
             </div>
@@ -225,11 +225,11 @@ export default function FollowsPage() {
           <div className="space-y-4">
           {visibleUsers.length === 0 ? (
             <>
-              <div className="rounded-[2rem] border border-dashed border-slate-300 bg-[linear-gradient(180deg,#ffffff_0%,#f8fafc_100%)] px-6 py-14 text-center shadow-sm">
-                <p className="text-base font-semibold text-slate-800">
+              <div className="rounded-[2rem] border border-dashed border-app bg-surface-muted px-6 py-14 text-center shadow-surface">
+                <p className="text-base font-semibold text-app">
                   {t("follows.emptyTitle")}
                 </p>
-                <p className="mt-2 text-sm text-slate-500">
+                <p className="mt-2 text-sm text-soft">
                   {t("follows.emptyDescription")}
                 </p>
               </div>
@@ -237,10 +237,10 @@ export default function FollowsPage() {
               {activeTab !== "suggestions" && fallbackSuggestions.length > 0 && (
                 <div className="space-y-4">
                   <div className="px-1 pt-2">
-                    <h3 className="text-lg font-semibold text-slate-950">
+                    <h3 className="text-lg font-semibold text-app">
                       {t("follows.fallbackTitle")}
                     </h3>
-                    <p className="mt-1 text-sm text-slate-500">
+                    <p className="mt-1 text-sm text-soft">
                       {t("follows.fallbackDescription")}
                     </p>
                   </div>

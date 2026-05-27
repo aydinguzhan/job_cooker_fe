@@ -1,5 +1,12 @@
-import { useEffect, useState } from "react";
-import { CircleChevronLeft, LogOut, Moon, Sun, UserRound } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import {
+  ChevronDown,
+  CircleChevronLeft,
+  LogOut,
+  Moon,
+  Sun,
+  UserRound,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { logout, userInfo } from "../../lib/auth";
 import { useTranslation } from "../../lang/useTranslation";
@@ -23,6 +30,8 @@ export default function Navbar({
   const { theme, toggleTheme } = useTheme();
   const currentUser = userInfo();
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement | null>(null);
   const fullName = [currentUser?.firstName, currentUser?.lastName]
     .filter(Boolean)
     .join(" ")
@@ -43,6 +52,23 @@ export default function Navbar({
     }
 
     fetchProfile();
+  }, []);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        userMenuRef.current &&
+        !userMenuRef.current.contains(event.target as Node)
+      ) {
+        setIsUserMenuOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   const handleLogout = () => {
@@ -111,37 +137,71 @@ export default function Navbar({
           </button>
         </div>
 
-        <div className="hidden items-center gap-3 rounded-2xl border border-app bg-surface-elevated px-3 py-2 sm:flex">
-          <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-slate-900 text-sm font-semibold text-white">
-            {imageSrc ? (
-              <img
-                src={imageSrc}
-                alt={fullName || t("common.user")}
-                className="h-full w-full object-cover"
-              />
-            ) : (
-              initials || <UserRound size={18} />
-            )}
-          </div>
-
-          <div className="min-w-0">
-            <p className="truncate text-sm font-semibold text-app">
-              {fullName || t("common.user")}
-            </p>
-            <p className="truncate text-xs text-soft">
-              {currentUser?.email || t("common.noEmail")}
-            </p>
-          </div>
-        </div>
         <NotificationBell />
 
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-2 rounded-lg bg-red-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-600"
-        >
-          <LogOut size={16} />
-          {t("common.logout")}
-        </button>
+        <div className="relative" ref={userMenuRef}>
+          <button
+            type="button"
+            onClick={() => setIsUserMenuOpen((prev) => !prev)}
+            className="flex items-center gap-1.5 rounded-full px-1 py-1 text-left transition hover:bg-surface-strong/70"
+          >
+            <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-slate-900 text-xs font-semibold text-white">
+              {imageSrc ? (
+                <img
+                  src={imageSrc}
+                  alt={fullName || t("common.user")}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                initials || <UserRound size={15} />
+              )}
+            </div>
+
+            <ChevronDown
+              className={`h-3.5 w-3.5 text-soft transition ${
+                isUserMenuOpen ? "rotate-180" : ""
+              }`}
+            />
+          </button>
+
+          {isUserMenuOpen ? (
+            <div className="absolute right-0 top-[calc(100%+0.75rem)] z-20 min-w-72 rounded-[1.5rem] border border-app bg-surface p-3 shadow-surface backdrop-blur-xl">
+              <div className="flex items-center gap-3 rounded-2xl bg-surface-muted px-3 py-3">
+                <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-slate-900 text-sm font-semibold text-white">
+                  {imageSrc ? (
+                    <img
+                      src={imageSrc}
+                      alt={fullName || t("common.user")}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    initials || <UserRound size={16} />
+                  )}
+                </div>
+
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-semibold text-app">
+                    {fullName || t("common.user")}
+                  </p>
+                  <p className="truncate text-xs text-soft">
+                    {currentUser?.email || t("common.noEmail")}
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-3 border-t border-app pt-3">
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium text-rose-500 transition hover:bg-rose-500/10"
+                >
+                  <LogOut size={16} />
+                  {t("common.logout")}
+                </button>
+              </div>
+            </div>
+          ) : null}
+        </div>
       </div>
     </header>
   );

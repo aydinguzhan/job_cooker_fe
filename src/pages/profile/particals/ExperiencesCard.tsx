@@ -134,11 +134,11 @@ export default function ExperiencesCard({
   const visibleExperiences = isEditing ? localExperiences : experiences;
 
   return (
-    <section className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm">
+    <section className="rounded-[2rem] border border-app bg-surface p-5 shadow-surface">
       <div className="mb-5 flex items-start justify-between gap-4">
         <div>
-          <h2 className="text-lg font-bold text-slate-950">Experiences</h2>
-          <p className="text-sm text-slate-500">Career history and roles</p>
+          <h2 className="text-lg font-bold text-app">Experiences</h2>
+          <p className="text-sm text-soft">Career history and roles</p>
         </div>
 
         {isEditing ? (
@@ -146,7 +146,7 @@ export default function ExperiencesCard({
             <button
               type="button"
               onClick={handleCancel}
-              className="rounded-xl border border-slate-200 p-2 text-slate-600 hover:bg-slate-50"
+              className="rounded-xl border border-app p-2 text-muted hover:bg-surface-strong hover:text-app"
             >
               <X className="h-4 w-4" />
             </button>
@@ -163,7 +163,7 @@ export default function ExperiencesCard({
           <button
             type="button"
             onClick={handleEdit}
-            className="rounded-xl border border-slate-200 p-2 text-slate-600 hover:bg-slate-50"
+            className="rounded-xl border border-app p-2 text-muted hover:bg-surface-strong hover:text-app"
           >
             <Pencil className="h-4 w-4" />
           </button>
@@ -172,7 +172,7 @@ export default function ExperiencesCard({
 
       <div className="space-y-4">
         {visibleExperiences.length === 0 && (
-          <p className="rounded-2xl bg-slate-50 p-4 text-sm text-slate-500">
+          <p className="rounded-2xl bg-surface-muted p-4 text-sm text-soft">
             No experiences added yet.
           </p>
         )}
@@ -180,7 +180,7 @@ export default function ExperiencesCard({
         {visibleExperiences.map((exp) => (
           <article
             key={exp.id}
-            className="relative rounded-3xl border border-slate-100 bg-slate-50 p-5"
+            className="relative rounded-3xl border border-app bg-surface-muted p-5"
           >
             {isEditing && (
               <button
@@ -205,7 +205,7 @@ export default function ExperiencesCard({
                       )
                     }
                     placeholder="Position title"
-                    className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-cyan-500"
+                    className="rounded-2xl border border-app bg-surface-elevated px-4 py-3 text-sm text-app outline-none focus:border-cyan-500"
                   />
 
                   <input
@@ -214,7 +214,7 @@ export default function ExperiencesCard({
                       updateExperience(exp.id, "company_name", e.target.value)
                     }
                     placeholder="Company name"
-                    className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-cyan-500"
+                    className="rounded-2xl border border-app bg-surface-elevated px-4 py-3 text-sm text-app outline-none focus:border-cyan-500"
                   />
                 </div>
 
@@ -228,12 +228,12 @@ export default function ExperiencesCard({
                     )
                   }
                   placeholder="Company location"
-                  className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-cyan-500"
+                  className="w-full rounded-2xl border border-app bg-surface-elevated px-4 py-3 text-sm text-app outline-none focus:border-cyan-500"
                 />
 
                 <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
                   <label className="space-y-1">
-                    <span className="text-xs font-semibold text-slate-500">
+                    <span className="text-xs font-semibold text-soft">
                       Start date
                     </span>
                     <input
@@ -242,12 +242,12 @@ export default function ExperiencesCard({
                       onChange={(e) =>
                         updateExperience(exp.id, "start_date", e.target.value)
                       }
-                      className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-cyan-500"
+                      className="w-full rounded-2xl border border-app bg-surface-elevated px-4 py-3 text-sm text-app outline-none focus:border-cyan-500"
                     />
                   </label>
 
                   <label className="space-y-1">
-                    <span className="text-xs font-semibold text-slate-500">
+                    <span className="text-xs font-semibold text-soft">
                       End date
                     </span>
                     <input
@@ -257,12 +257,12 @@ export default function ExperiencesCard({
                       onChange={(e) =>
                         updateExperience(exp.id, "end_date", e.target.value)
                       }
-                      className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400 focus:border-cyan-500"
+                      className="w-full rounded-2xl border border-app bg-surface-elevated px-4 py-3 text-sm text-app outline-none disabled:cursor-not-allowed disabled:bg-surface-strong disabled:text-soft focus:border-cyan-500"
                     />
                   </label>
                 </div>
 
-                <label className="flex w-fit items-center gap-2 rounded-2xl bg-white px-4 py-3 text-sm font-semibold text-slate-600">
+                <label className="flex w-fit items-center gap-2 rounded-2xl bg-surface-elevated px-4 py-3 text-sm font-semibold text-muted">
                   <input
                     type="checkbox"
                     checked={exp.is_current}
@@ -285,7 +285,7 @@ export default function ExperiencesCard({
                   }
                   placeholder="Experience description"
                   rows={4}
-                  className="w-full resize-none rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-cyan-500"
+                  className="w-full resize-none rounded-2xl border border-app bg-surface-elevated px-4 py-3 text-sm text-app outline-none focus:border-cyan-500"
                 />
               </div>
             ) : (
@@ -293,15 +293,15 @@ export default function ExperiencesCard({
                 <div className="flex flex-col gap-4 pr-12 lg:flex-row lg:items-start lg:justify-between">
                   <div className="min-w-0">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-white">
-                        <BriefcaseBusiness className="h-5 w-5 text-slate-600" />
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-surface-elevated">
+                        <BriefcaseBusiness className="h-5 w-5 text-muted" />
                       </div>
 
                       <div className="min-w-0">
-                        <h3 className="truncate text-base font-bold text-slate-900">
+                        <h3 className="truncate text-base font-bold text-app">
                           {exp.position_title}
                         </h3>
-                        <p className="truncate text-sm text-slate-500">
+                        <p className="truncate text-sm text-soft">
                           {exp.company_name}
                           {exp.company_location
                             ? ` · ${exp.company_location}`
@@ -311,14 +311,14 @@ export default function ExperiencesCard({
                     </div>
                   </div>
 
-                  <span className="inline-flex w-fit items-center gap-2 rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-600">
+                  <span className="inline-flex w-fit items-center gap-2 rounded-full bg-surface-elevated px-3 py-1 text-xs font-semibold text-muted">
                     <CalendarDays className="h-4 w-4" />
                     {formatDate(exp.start_date)} -{" "}
                     {exp.is_current ? "Present" : formatDate(exp.end_date)}
                   </span>
                 </div>
 
-                <p className="mt-4 text-sm leading-7 text-slate-600">
+                <p className="mt-4 text-sm leading-7 text-muted">
                   {exp.description || "No description."}
                 </p>
               </>
@@ -330,7 +330,7 @@ export default function ExperiencesCard({
           <button
             type="button"
             onClick={addExperience}
-            className="flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-slate-300 py-4 text-sm font-semibold text-slate-600 hover:bg-slate-50"
+            className="flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-app py-4 text-sm font-semibold text-muted hover:bg-surface-strong hover:text-app"
           >
             <Plus className="h-4 w-4" />
             Add Experience

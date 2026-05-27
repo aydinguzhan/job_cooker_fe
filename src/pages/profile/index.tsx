@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import JobCookerLoader from "../../components/ui/Loader";
 import {
   createProfile,
   generateAiProfile,
@@ -23,6 +22,7 @@ import { getSkills } from "../../services/global.service";
 import AiProfileGenerateModal from "../../components/layout/AiProfileGenerateModal";
 import AiButton from "../../components/layout/AiButton";
 import ProfileCreateForm from "../../components/profile/ProfileCreateForm";
+import ProfilePageSkeleton from "../../components/spinner/ProfilePageSkeleton";
 import {
   mapAiProfileToCreatePayload,
   mapAiProfileToFormState,
@@ -92,7 +92,7 @@ export default function Profile() {
     }
   }, [isCreateMode, skillOptions.length]);
 
-  if (isLoading) return <JobCookerLoader />;
+  if (isLoading) return <ProfilePageSkeleton />;
 
   async function handleGenerateProfile(prompt: string) {
     const nextAiDraft = await generateAiProfile(prompt);
@@ -190,7 +190,7 @@ export default function Profile() {
     }
   }
 
-  if (isLoading || isApplyingAiProfile) return <JobCookerLoader />;
+  if (isLoading || isApplyingAiProfile) return <ProfilePageSkeleton />;
 
   if (!profile && !isCreateMode) {
     return (
@@ -211,7 +211,7 @@ export default function Profile() {
 
   if (!profile && isCreateMode) {
     return (
-      <main className="min-h-screen bg-slate-100 px-4 py-6 md:px-8">
+      <main className="min-h-screen bg-app px-4 py-6 md:px-8 text-app">
         <AiProfileGenerateModal
           open={isAiModalOpen}
           onClose={() => setIsAiModalOpen(false)}
@@ -236,7 +236,7 @@ export default function Profile() {
   if (!profile) return null;
 
   return (
-    <main className="min-h-screen bg-slate-100 px-4 py-6 md:px-8">
+    <main className="min-h-screen bg-app px-4 py-6 md:px-8 text-app">
       <AiProfileGenerateModal
         open={isAiModalOpen}
         onClose={() => setIsAiModalOpen(false)}

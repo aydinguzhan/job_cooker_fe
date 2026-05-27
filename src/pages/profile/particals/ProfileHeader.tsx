@@ -93,14 +93,14 @@ export default function ProfileHeaderCard({
   }
 
   return (
-    <section className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm">
+    <section className="overflow-hidden rounded-[2rem] border border-app bg-surface shadow-surface">
       <div className="h-44 bg-gradient-to-r from-slate-950 via-slate-800 to-cyan-800" />
 
       <div className="px-5 pb-6 md:px-8">
         <div className="flex flex-col gap-6 pt-6 lg:flex-row lg:items-start lg:justify-between">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
             <div className="-mt-24 shrink-0">
-              <div className="group relative h-36 w-36 overflow-hidden rounded-[2rem] border-4 border-white bg-slate-100 shadow-lg">
+              <div className="group relative h-36 w-36 overflow-hidden rounded-[2rem] border-4 border-surface-elevated bg-surface-strong shadow-lg">
                 {imageSrc ? (
                   <img
                     src={imageSrc}
@@ -108,7 +108,7 @@ export default function ProfileHeaderCard({
                     className="h-full w-full object-cover"
                   />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center text-4xl font-bold text-slate-400">
+                  <div className="flex h-full w-full items-center justify-center text-4xl font-bold text-soft">
                     P
                   </div>
                 )}
@@ -150,10 +150,10 @@ export default function ProfileHeaderCard({
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Profile title"
-                  className="mt-2 w-full rounded-2xl border border-slate-200 px-4 py-3 text-xl font-bold outline-none focus:border-cyan-500"
+                  className="mt-2 w-full rounded-2xl border border-app bg-surface-elevated px-4 py-3 text-xl font-bold text-app outline-none focus:border-cyan-500"
                 />
               ) : (
-                <h1 className="mt-2 break-words text-2xl font-bold text-slate-950 md:text-3xl">
+                <h1 className="mt-2 break-words text-2xl font-bold text-app md:text-3xl">
                   {profile.title}
                 </h1>
               )}
@@ -167,7 +167,7 @@ export default function ProfileHeaderCard({
                   type="button"
                   onClick={handleCancel}
                   disabled={isImageUploading}
-                  className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="inline-flex items-center gap-2 rounded-2xl border border-app bg-surface-elevated px-4 py-2 text-sm font-semibold text-muted hover:bg-surface-strong hover:text-app disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   <X className="h-4 w-4" />
                   Cancel
@@ -197,8 +197,8 @@ export default function ProfileHeaderCard({
         </div>
 
         <div className="mt-6 grid gap-4 lg:grid-cols-[1fr_300px]">
-          <div className="rounded-3xl bg-slate-50 p-5">
-            <p className="mb-2 text-sm font-bold text-slate-700">Bio</p>
+          <div className="rounded-3xl bg-surface-muted p-5">
+            <p className="mb-2 text-sm font-bold text-muted">Bio</p>
 
             {isEditing ? (
               <textarea
@@ -206,17 +206,17 @@ export default function ProfileHeaderCard({
                 onChange={(e) => setBio(e.target.value)}
                 rows={6}
                 placeholder="Tell something about yourself..."
-                className="w-full resize-none rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm leading-6 outline-none focus:border-cyan-500"
+                className="w-full resize-none rounded-2xl border border-app bg-surface-elevated px-4 py-3 text-sm leading-6 text-app outline-none focus:border-cyan-500"
               />
             ) : (
-              <p className="text-sm leading-7 text-slate-600">
+              <p className="text-sm leading-7 text-muted">
                 {profile.bio_description || "No bio description added yet."}
               </p>
             )}
           </div>
 
-          <div className="rounded-3xl bg-slate-50 p-5">
-            <p className="text-sm font-bold text-slate-700">Profile Status</p>
+          <div className="rounded-3xl bg-surface-muted p-5">
+            <p className="text-sm font-bold text-muted">Profile Status</p>
 
             <span className="mt-3 inline-flex rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-700">
               {profile.status}
@@ -224,11 +224,11 @@ export default function ProfileHeaderCard({
 
             {isEditing && (
               <div className="mt-5">
-                <p className="mb-2 text-xs font-semibold text-slate-500">
+                <p className="mb-2 text-xs font-semibold text-soft">
                   Profile image
                 </p>
 
-                <p className="break-all rounded-2xl bg-white px-4 py-3 text-xs text-slate-500">
+                <p className="break-all rounded-2xl bg-surface-elevated px-4 py-3 text-xs text-soft">
                   {imagePath || "No image selected"}
                 </p>
               </div>
