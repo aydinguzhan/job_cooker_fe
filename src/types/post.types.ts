@@ -6,13 +6,38 @@ export interface Post {
   full_name: string;
   title: string;
   content: string;
-
   status: PostStatus;
-
   created_at: string;
   updated_at: string;
   islike: boolean;
-  comment_count:number
+  comment_count:number;
+  profile_image_path?: string;
+}
+
+export interface PostDetail {
+  id: string;
+  user_id: string;
+  profile_image_path?: string | null;
+  title: string;
+  content: string;
+  status: PostStatus;
+  created_at: string;
+  updated_at: string;
+  full_name?: string;
+  like_count?: number;
+  comment_count?: number;
+  is_liked?: boolean;
+}
+
+export interface PostComment {
+  id?: string;
+  post_id: string;
+  user_id: string;
+  full_name?: string;
+  profile_image_path?: string | null;
+  content: string;
+  created_at: string;
+  updated_at?: string;
 }
 
 export interface GetPostResponse {

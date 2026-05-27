@@ -23,9 +23,9 @@ export default function Button({
   const variants = {
     primary: "bg-slate-900 text-white hover:bg-slate-800",
     secondary: "bg-cyan-500 text-white hover:bg-cyan-600",
-    ghost: "bg-transparent text-slate-600 hover:bg-slate-100",
+    ghost: "bg-transparent text-muted hover:bg-surface-strong hover:text-app",
     outline:
-      "border border-slate-200 bg-white text-slate-600 hover:bg-slate-50",
+      "border border-app bg-surface-elevated text-muted hover:bg-surface-strong hover:text-app",
   };
 
   const sizes = {

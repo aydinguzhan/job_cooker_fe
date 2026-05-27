@@ -3,6 +3,8 @@ import { userInfo } from "../lib/auth";
 import type {
   CommentPayload,
   Post,
+  PostComment,
+  PostDetail,
   PostCreatePayload,
   PostLike,
 } from "../types/post.types";
@@ -22,6 +24,16 @@ export async function getDashboardFeed(limit = 20, offset = 0): Promise<Post[]> 
     },
   });
 
+  return response.data.data;
+}
+
+export async function getSavedPosts(): Promise<Post[]> {
+  const response = await apiClient.get("/posts/save");
+  return response.data.data ?? [];
+}
+
+export async function getPostDetail(post_id: string): Promise<PostDetail> {
+  const response = await apiClient.get(`/posts/detail/${post_id}`);
   return response.data.data;
 }
 
@@ -50,12 +62,22 @@ export async function postLike(post_id: string) {
   return result;
 }
 
-export async function getAllComments(post_id: string) {
+export async function getAllComments(post_id: string): Promise<PostComment[]> {
   const results = await apiClient.get(`/posts/comment/${post_id}`);
-  return results.data;
+  return results.data.data ?? [];
 }
 
-export async function createComment(payload: CommentPayload) {
+export async function createComment(payload: CommentPayload): Promise<PostComment> {
   const result = await apiClient.post("/posts/comment", payload);
-  return result.data;
+  return result.data.data;
+}
+
+export async function savePost(post_id: string) {
+  const response = await apiClient.post(`/posts/save/${post_id}`);
+  return response.data.data;
+}
+
+export async function unsavePost(post_id: string) {
+  const response = await apiClient.put(`/posts/save/${post_id}`);
+  return response.data.data;
 }

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import FollowsTabs from "../../components/follows/FollowsTabs";
 import FollowUserCard from "../../components/follows/FollowUserCard";
 import JobCookerLoader from "../../components/ui/Loader";
+import { useTranslation } from "../../lang/useTranslation";
 import {
   followUser,
   getFollowers,
@@ -31,6 +32,7 @@ async function fetchFollowCollection(tab: FollowTab) {
 }
 
 export default function FollowsPage() {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<FollowTab>("suggestions");
   const [collections, setCollections] =
     useState<FollowCollections>(emptyCollections);
@@ -137,45 +139,109 @@ export default function FollowsPage() {
   const fallbackSuggestions = collections.suggestions.filter(
     (user) => !visibleUsers.some((visibleUser) => visibleUser.id === user.id),
   );
+  const counts = {
+    suggestions: collections.suggestions.length,
+    followers: collections.followers.length,
+    followings: collections.followings.length,
+  };
+  const activeTabMeta = {
+    suggestions: {
+      title: t("follows.suggestionsTitle"),
+      description: t("follows.suggestionsBody"),
+    },
+    followers: {
+      title: t("follows.followersTitle"),
+      description: t("follows.followersBody"),
+    },
+    followings: {
+      title: t("follows.followingsTitle"),
+      description: t("follows.followingsBody"),
+    },
+  }[activeTab];
 
   if (isLoading) return <JobCookerLoader />;
 
   return (
-    <main className="min-h-screen bg-slate-100 px-4 py-6 md:px-8">
+    <main className="min-h-screen bg-[linear-gradient(180deg,#f8fafc_0%,#eef6ff_38%,#f8fafc_100%)] px-4 py-6 md:px-8">
       <div className="mx-auto max-w-7xl space-y-6">
         <section className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm">
-          <div className="bg-[radial-gradient(circle_at_top_right,_rgba(34,197,94,0.28),_transparent_30%),linear-gradient(135deg,#022c22_0%,#14532d_35%,#0f172a_100%)] px-6 py-8 text-white md:px-8">
-            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-emerald-200">
-              Network
+          <div className="bg-[radial-gradient(circle_at_top_right,_rgba(34,211,238,0.28),_transparent_28%),radial-gradient(circle_at_left,_rgba(59,130,246,0.22),_transparent_30%),linear-gradient(135deg,#082f49_0%,#0f172a_58%,#111827_100%)] px-6 py-8 text-white md:px-8">
+            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-200">
+              {t("follows.heroEyebrow")}
             </p>
             <h1 className="mt-3 text-3xl font-bold md:text-4xl">
-              Takip ağını büyüt ve seni takip edenleri yönet.
+              {t("follows.heroTitle")}
             </h1>
             <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-200">
-              Önerileri keşfet, seni takip edenleri görüntüle ve takip ettiğin
-              kişileri tek ekrandan yönet.
+              {t("follows.heroDescription")}
             </p>
+
+            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+              <div className="rounded-[1.5rem] border border-white/10 bg-white/10 px-4 py-4 backdrop-blur">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-100">
+                  {t("follows.suggestions")}
+                </p>
+                <p className="mt-2 text-2xl font-bold text-white">{counts.suggestions}</p>
+              </div>
+              <div className="rounded-[1.5rem] border border-white/10 bg-white/10 px-4 py-4 backdrop-blur">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-100">
+                  {t("follows.followers")}
+                </p>
+                <p className="mt-2 text-2xl font-bold text-white">{counts.followers}</p>
+              </div>
+              <div className="rounded-[1.5rem] border border-white/10 bg-white/10 px-4 py-4 backdrop-blur">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-100">
+                  {t("follows.following")}
+                </p>
+                <p className="mt-2 text-2xl font-bold text-white">{counts.followings}</p>
+              </div>
+            </div>
           </div>
         </section>
 
-        <FollowsTabs activeTab={activeTab} onChange={setActiveTab} />
+        <FollowsTabs activeTab={activeTab} counts={counts} onChange={setActiveTab} />
 
-        <section className="space-y-4">
+        <section className="rounded-[2rem] border border-slate-200/80 bg-white/90 p-5 shadow-[0_20px_50px_-34px_rgba(15,23,42,0.25)] backdrop-blur">
+          <div className="mb-5 flex flex-col gap-3 border-b border-slate-100 pb-5 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-700">
+                {t("follows.activeView")}
+              </p>
+              <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">
+                {activeTabMeta.title}
+              </h2>
+              <p className="mt-1 max-w-2xl text-sm leading-6 text-slate-500">
+                {activeTabMeta.description}
+              </p>
+            </div>
+
+            <div className="rounded-2xl bg-slate-50 px-4 py-3 text-sm text-slate-600 ring-1 ring-slate-100">
+              <span className="font-semibold text-slate-900">
+                {t("follows.showingUsers", { count: visibleUsers.length })}
+              </span>
+            </div>
+          </div>
+
+          <div className="space-y-4">
           {visibleUsers.length === 0 ? (
             <>
-              <div className="rounded-[2rem] border border-dashed border-slate-300 bg-white px-6 py-12 text-center text-slate-500 shadow-sm">
-                Bu sekmede henüz gösterilecek kullanıcı yok.
+              <div className="rounded-[2rem] border border-dashed border-slate-300 bg-[linear-gradient(180deg,#ffffff_0%,#f8fafc_100%)] px-6 py-14 text-center shadow-sm">
+                <p className="text-base font-semibold text-slate-800">
+                  {t("follows.emptyTitle")}
+                </p>
+                <p className="mt-2 text-sm text-slate-500">
+                  {t("follows.emptyDescription")}
+                </p>
               </div>
 
               {activeTab !== "suggestions" && fallbackSuggestions.length > 0 && (
                 <div className="space-y-4">
-                  <div className="px-1">
-                    <h2 className="text-lg font-semibold text-slate-950">
-                      Takip etmeye başlamak için öneriler
-                    </h2>
+                  <div className="px-1 pt-2">
+                    <h3 className="text-lg font-semibold text-slate-950">
+                      {t("follows.fallbackTitle")}
+                    </h3>
                     <p className="mt-1 text-sm text-slate-500">
-                      Henüz bağlantın yoksa buradan kullanıcıları takip ederek ağını
-                      oluşturabilirsin.
+                      {t("follows.fallbackDescription")}
                     </p>
                   </div>
 
@@ -184,7 +250,7 @@ export default function FollowsPage() {
                       key={user.id}
                       user={user}
                       isPending={pendingUserId === user.id}
-                      actionLabel="Follow"
+                      actionLabel={t("common.follow")}
                       actionVariant="follow"
                       onAction={handleFollow}
                     />
@@ -201,13 +267,14 @@ export default function FollowsPage() {
                   key={user.id}
                   user={user}
                   isPending={pendingUserId === user.id}
-                  actionLabel={isFollowAction ? "Follow" : "Unfollow"}
+                  actionLabel={isFollowAction ? t("common.follow") : t("common.unfollow")}
                   actionVariant={isFollowAction ? "follow" : "unfollow"}
                   onAction={isFollowAction ? handleFollow : handleUnfollow}
                 />
               );
             })
           )}
+          </div>
         </section>
       </div>
     </main>

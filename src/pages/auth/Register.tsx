@@ -10,10 +10,12 @@ import {
   registerSchema,
   type RegisterFormValues,
 } from "../../schemas/auth.schema";
+import { useTranslation } from "../../lang/useTranslation";
 import { setAccessToken } from "../../lib/auth";
 
 export default function Register() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const {
     register,
     handleSubmit,
@@ -37,12 +39,15 @@ const onSubmit = async (values: RegisterFormValues) => {
 };
 
   return (
-    <AuthLayout title="Create Account" description="Register to start using the app">
+    <AuthLayout
+      title={t("auth.registerTitle")}
+      description={t("auth.registerDescription")}
+    >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Input
             type="text"
-            label="First name"
+            label={t("auth.firstName")}
             placeholder="Oğuzhan"
             error={errors.firstName?.message}
             {...register("firstName")}
@@ -50,7 +55,7 @@ const onSubmit = async (values: RegisterFormValues) => {
 
           <Input
             type="text"
-            label="Last name"
+            label={t("auth.lastName")}
             placeholder="Aydın"
             error={errors.lastName?.message}
             {...register("lastName")}
@@ -59,7 +64,7 @@ const onSubmit = async (values: RegisterFormValues) => {
 
         <Input
           type="email"
-          label="Email"
+          label={t("auth.email")}
           placeholder="you@example.com"
           error={errors.email?.message}
           {...register("email")}
@@ -67,21 +72,21 @@ const onSubmit = async (values: RegisterFormValues) => {
 
         <Input
           type="password"
-          label="Password"
+          label={t("auth.password")}
           placeholder="••••••••"
           error={errors.password?.message}
           {...register("password")}
         />
 
         <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Creating..." : "Register"}
+          {isSubmitting ? t("auth.creating") : t("auth.register")}
         </Button>
       </form>
 
       <p className="mt-6 text-center text-sm text-slate-500">
-        Already have an account?{" "}
+        {t("auth.haveAccount")}{" "}
         <Link to="/login" className="font-medium text-slate-900">
-          Login
+          {t("auth.login")}
         </Link>
       </p>
     </AuthLayout>

@@ -3,6 +3,7 @@ import { Send } from "lucide-react";
 
 import PostCard from "../../components/posts/PostCard";
 
+import { useTranslation } from "../../lang/useTranslation";
 import type { Post } from "../../types/post.types";
 
 import {
@@ -11,6 +12,7 @@ import {
 } from "../../services/posts.service";
 
 export default function DashBoard() {
+  const { t } = useTranslation();
   const [posts, setPosts] = useState<Post[]>([]);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -51,41 +53,41 @@ export default function DashBoard() {
 
   return (
     <section className="mx-auto max-w-3xl space-y-6">
-      <div className="rounded-3xl border border-slate-100 bg-white p-5 shadow-sm">
+      <div className="rounded-3xl border border-app bg-surface p-5 shadow-surface">
         <div className="space-y-3">
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="Post title"
+            placeholder={t("dashboardPage.titlePlaceholder")}
             className="
-              w-full rounded-2xl border border-slate-100
-              bg-slate-50/60 px-4 py-3
-              text-sm font-medium text-slate-800
+              w-full rounded-2xl border border-app
+              bg-surface-muted px-4 py-3
+              text-sm font-medium text-app
               outline-none transition
-              placeholder:text-slate-400
-              focus:border-slate-200 focus:bg-white
+              placeholder:text-soft
+              focus:border-strong focus:bg-surface-elevated
             "
           />
 
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            placeholder="What do you want to share?"
+            placeholder={t("dashboardPage.contentPlaceholder")}
             rows={4}
             className="
               w-full resize-none rounded-2xl
-              border border-slate-100
-              bg-slate-50/60 px-4 py-3
-              text-sm text-slate-700
+              border border-app
+              bg-surface-muted px-4 py-3
+              text-sm text-app
               outline-none transition
-              placeholder:text-slate-400
-              focus:border-slate-200 focus:bg-white
+              placeholder:text-soft
+              focus:border-strong focus:bg-surface-elevated
             "
           />
         </div>
 
         <div className="mt-4 flex items-center justify-between">
-          <span className="text-xs text-slate-400">
+          <span className="text-xs text-soft">
             {content.length}/500
           </span>
 
@@ -106,19 +108,19 @@ export default function DashBoard() {
             "
           >
             <Send size={16} />
-            Share
+            {t("dashboardPage.share")}
           </button>
         </div>
       </div>
 
       <div className="space-y-4">
         <div>
-          <h2 className="text-xl font-semibold text-slate-900">
-            Your Feed
+          <h2 className="text-xl font-semibold text-app">
+            {t("dashboardPage.feedTitle")}
           </h2>
 
-          <p className="text-sm text-slate-500">
-            Kendi paylaşımların ve takip ettiğin kişilerin akışı
+          <p className="text-sm text-soft">
+            {t("dashboardPage.feedDescription")}
           </p>
         </div>
 
@@ -130,16 +132,16 @@ export default function DashBoard() {
           <div
             className="
               rounded-3xl border border-dashed
-              border-slate-200 bg-white p-10
+              border-app bg-surface p-10
               text-center
             "
           >
-            <h3 className="text-sm font-medium text-slate-600">
-              No posts yet
+            <h3 className="text-sm font-medium text-muted">
+              {t("dashboardPage.noPostsTitle")}
             </h3>
 
-            <p className="mt-1 text-sm text-slate-400">
-              Be the first one to share something.
+            <p className="mt-1 text-sm text-soft">
+              {t("dashboardPage.noPostsDescription")}
             </p>
           </div>
         )}

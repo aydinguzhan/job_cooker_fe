@@ -6,11 +6,13 @@ import { login } from "../../services/auth.service";
 import AuthLayout from "../../components/layout/AuthLayout";
 import Button from "../../components/ui/Button";
 import Input from "../../components/ui/Input";
+import { useTranslation } from "../../lang/useTranslation";
 import { loginSchema, type LoginFormValues } from "../../schemas/auth.schema";
 import { setAccessToken } from "../../lib/auth";
 
 export default function Login() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const {
     register,
     handleSubmit,
@@ -34,11 +36,14 @@ const onSubmit = async (values: LoginFormValues) => {
 };
 
   return (
-    <AuthLayout title="Welcome Back" description="Login to continue your account">
+    <AuthLayout
+      title={t("auth.loginTitle")}
+      description={t("auth.loginDescription")}
+    >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <Input
           type="email"
-          label="Email"
+          label={t("auth.email")}
           placeholder="you@example.com"
           error={errors.email?.message}
           {...register("email")}
@@ -46,21 +51,21 @@ const onSubmit = async (values: LoginFormValues) => {
 
         <Input
           type="password"
-          label="Password"
+          label={t("auth.password")}
           placeholder="••••••••"
           error={errors.password?.message}
           {...register("password")}
         />
 
         <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Logging in..." : "Login"}
+          {isSubmitting ? t("auth.loggingIn") : t("auth.login")}
         </Button>
       </form>
 
       <p className="mt-6 text-center text-sm text-slate-500">
-        Don&apos;t have an account?{" "}
+        {t("auth.noAccount")}{" "}
         <Link to="/register" className="font-medium text-slate-900">
-          Register
+          {t("auth.register")}
         </Link>
       </p>
     </AuthLayout>
