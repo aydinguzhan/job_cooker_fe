@@ -7,9 +7,11 @@ import { LanguageContext, type Language } from "./context";
 import en from "./en.json";
 import tr from "./tr.json";
 
-type TranslationValue = string | Record<string, TranslationValue>;
+type TranslationValue = string | TranslationDictionary;
 
-type TranslationDictionary = Record<string, TranslationValue>;
+type TranslationDictionary = {
+  [key: string]: TranslationValue;
+};
 
 const LANGUAGE_STORAGE_KEY = "app_language";
 

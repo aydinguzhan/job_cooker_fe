@@ -13,7 +13,7 @@ type Props = {
     skills: {
       skill_id: string;
       level: number;
-    }[]
+    }[],
   ) => void;
 };
 
@@ -30,7 +30,7 @@ export default function SkillsCard({
 
   const selectedSkillIds = useMemo(
     () => new Set(selectedSkills.map((skill) => skill.id)),
-    [selectedSkills]
+    [selectedSkills],
   );
 
   function mapSkillsToOptions(items: ProfileSkill[]): SkillOption[] {
@@ -86,8 +86,8 @@ export default function SkillsCard({
               ...skill,
               level,
             }
-          : skill
-      )
+          : skill,
+      ),
     );
   }
 
@@ -105,7 +105,7 @@ export default function SkillsCard({
   const visibleSkills = isEditing ? localSkills : skills;
 
   return (
-    <section className="rounded-[2rem] border border-app bg-surface p-5 shadow-surface">
+    <section className="rounded-xl border border-app bg-surface p-5 shadow-surface">
       <div className="mb-5 flex items-start justify-between gap-4">
         <div>
           <h2 className="text-lg font-bold text-app">Skills</h2>
@@ -176,9 +176,7 @@ export default function SkillsCard({
 
             <div className="flex items-center justify-between gap-3 pr-12">
               <div className="min-w-0">
-                <p className="truncate font-semibold text-app">
-                  {skill.name}
-                </p>
+                <p className="truncate font-semibold text-app">{skill.name}</p>
                 <p className="text-xs text-soft">{skill.short_key}</p>
               </div>
 
@@ -193,7 +191,9 @@ export default function SkillsCard({
                       type="button"
                       disabled={!isEditing}
                       onClick={() => changeLevel(skill.id, level)}
-                      className={isEditing ? "cursor-pointer" : "cursor-default"}
+                      className={
+                        isEditing ? "cursor-pointer" : "cursor-default"
+                      }
                     >
                       <Star
                         className={`h-4 w-4 ${

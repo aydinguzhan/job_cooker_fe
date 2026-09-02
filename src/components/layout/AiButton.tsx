@@ -1,10 +1,13 @@
 import { Sparkles } from "lucide-react";
+import { useTranslation } from "../../lang/useTranslation";
 
 type Props = {
   onClick: () => void;
 };
 
 export default function AiButton({ onClick }: Props) {
+  const { t } = useTranslation();
+
   return (
     <button
       type="button"
@@ -31,10 +34,10 @@ export default function AiButton({ onClick }: Props) {
         />
       </span>
 
-      <span className="relative">AI ile Profil Oluştur</span>
+      <span className="relative">{t("aiProfile.openButton")}</span>
 
       <span className="relative rounded-full bg-white/10 px-2 py-0.5 text-[11px] font-medium text-violet-100 ring-1 ring-white/15">
-        Beta
+        {t("aiProfile.beta")}
       </span>
     </button>
   );

@@ -13,6 +13,7 @@ import ProtectedRoute from "../components/router/ProtectedRouter";
 import PublicRoute from "../components/router/PublicRoute";
 import AppLayout from "../components/layout/Applayout";
 import PostDetailCard from "../pages/postDetail";
+import MessagesPage from "../pages/messages";
 
 const router = createBrowserRouter([
   {
@@ -73,6 +74,16 @@ const router = createBrowserRouter([
       <ProtectedRoute>
         <AppLayout>
           <SavedPostsPage />
+        </AppLayout>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/messages",
+    element: (
+      <ProtectedRoute>
+        <AppLayout>
+          <MessagesPage />
         </AppLayout>
       </ProtectedRoute>
     ),

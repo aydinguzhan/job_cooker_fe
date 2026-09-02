@@ -7,10 +7,7 @@ import DashboardPageSkeleton from "../../components/spinner/DashboardPageSkeleto
 import { useTranslation } from "../../lang/useTranslation";
 import type { Post } from "../../types/post.types";
 
-import {
-  getDashboardFeed,
-  postCreate,
-} from "../../services/posts.service";
+import { getDashboardFeed, postCreate } from "../../services/posts.service";
 
 export default function DashBoard() {
   const { t } = useTranslation();
@@ -61,15 +58,24 @@ export default function DashBoard() {
   }
 
   return (
-    <section className="mx-auto max-w-3xl space-y-6">
-      <div className="rounded-3xl border border-app bg-surface p-5 shadow-surface">
+    <section className="mx-auto max-w-3xl space-y-6 ">
+      <div className="bg-white p-4 rounded-xl">
+        <h2 className="text-lg font-semibold text-app">
+          {t("dashboardPage.feedTitle")}
+        </h2>
+
+        <p className="text-sm text-soft">
+          {t("dashboardPage.feedDescription")}
+        </p>
+      </div>
+      <div className="rounded-xl border border-app bg-surface p-5 shadow-surface">
         <div className="space-y-3">
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder={t("dashboardPage.titlePlaceholder")}
             className="
-              w-full rounded-2xl border border-app
+              w-full rounded-xl border border-app
               bg-surface-muted px-4 py-3
               text-sm font-medium text-app
               outline-none transition
@@ -84,7 +90,7 @@ export default function DashBoard() {
             placeholder={t("dashboardPage.contentPlaceholder")}
             rows={4}
             className="
-              w-full resize-none rounded-2xl
+              w-full resize-none rounded-xl
               border border-app
               bg-surface-muted px-4 py-3
               text-sm text-app
@@ -96,9 +102,7 @@ export default function DashBoard() {
         </div>
 
         <div className="mt-4 flex items-center justify-between">
-          <span className="text-xs text-soft">
-            {content.length}/500
-          </span>
+          <span className="text-xs text-soft">{content.length}/500</span>
 
           <button
             type="button"
@@ -123,20 +127,8 @@ export default function DashBoard() {
       </div>
 
       <div className="space-y-4">
-        <div>
-          <h2 className="text-xl font-semibold text-app">
-            {t("dashboardPage.feedTitle")}
-          </h2>
-
-          <p className="text-sm text-soft">
-            {t("dashboardPage.feedDescription")}
-          </p>
-        </div>
-
         {posts.length > 0 ? (
-          posts.map((post) => (
-            <PostCard key={post.id} post={post} />
-          ))
+          posts.map((post) => <PostCard key={post.id} post={post} />)
         ) : (
           <div
             className="

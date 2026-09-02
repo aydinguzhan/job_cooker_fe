@@ -75,6 +75,7 @@ const onSubmit = async (values: LoginFormValues) => {
         <Link to="/register" className="font-medium text-white">
           {t("auth.register")}
         </Link>
+        
       </p>
     </AuthLayout>
   );

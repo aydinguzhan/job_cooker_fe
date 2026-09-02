@@ -25,6 +25,7 @@ export type RegisterPayload = {
   lastName: string;
   email: string;
   password: string;
+  role: "job_seeker" | "recruiter";
 };
 
 export type DecodedAccessToken = {
