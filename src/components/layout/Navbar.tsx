@@ -4,6 +4,7 @@ import {
   CircleChevronLeft,
   LogOut,
   Moon,
+  QrCodeIcon,
   Sun,
   UserRound,
 } from "lucide-react";
@@ -15,15 +16,18 @@ import { getUserProfile } from "../../services/profile.service";
 import { useTheme } from "../../theme/useTheme";
 import type { Profile } from "../../types/profile.types";
 import NotificationBell from "./Notification";
+import Button from "../ui/Button";
 
 type NavbarProps = {
   onToggleSidebar: () => void;
+  toggleQr: () => void;
   isSidebarOpen: boolean;
 };
 
 export default function Navbar({
   onToggleSidebar,
   isSidebarOpen,
+  toggleQr,
 }: NavbarProps) {
   const navigate = useNavigate();
   const { language, setLanguage, t } = useTranslation();
@@ -36,9 +40,10 @@ export default function Navbar({
     .filter(Boolean)
     .join(" ")
     .trim();
-  const initials = `${currentUser?.firstName?.[0] ?? ""}${currentUser?.lastName?.[0] ?? ""}`
-    .toUpperCase()
-    .trim();
+  const initials =
+    `${currentUser?.firstName?.[0] ?? ""}${currentUser?.lastName?.[0] ?? ""}`
+      .toUpperCase()
+      .trim();
   const imageSrc = resolveFileUrl(profile?.profile_image_path);
 
   useEffect(() => {
@@ -188,7 +193,14 @@ export default function Navbar({
                   </p>
                 </div>
               </div>
-
+              <div className="mt-3 border-t border-app pt-3">
+                <Button onClick={toggleQr}>
+                  <div className="flex gap-4 cursor-pointer">
+                    <QrCodeIcon />
+                    <div>Login device for qr code</div>
+                  </div>
+                </Button>
+              </div>
               <div className="mt-3 border-t border-app pt-3">
                 <button
                   type="button"

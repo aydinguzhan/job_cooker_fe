@@ -94,11 +94,11 @@ export default function PostCard({
       day: "2-digit",
       month: "long",
       year: "numeric",
-    }
+    },
   );
 
   return (
-    <article className="overflow-hidden rounded-3xl border border-app bg-surface shadow-surface">
+    <article className="overflow-hidden rounded-xl border border-app bg-surface shadow-surface">
       <header className="flex items-center justify-between border-b border-app p-5">
         <div className="flex items-center gap-3">
           <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-cyan-50 text-cyan-600 ring-1 ring-cyan-100">
@@ -114,9 +114,7 @@ export default function PostCard({
           </div>
 
           <div>
-            <p className="text-sm font-semibold text-app">
-              {post.full_name}
-            </p>
+            <p className="text-sm font-semibold text-app">{post.full_name}</p>
             <p className="text-xs text-soft">{formattedDate}</p>
           </div>
         </div>
@@ -177,7 +175,9 @@ export default function PostCard({
           }
         >
           <span>{isLiked ? t("postCard.oneLike") : t("postCard.noLikes")}</span>
-          <span>{t("postCard.commentsCount", { count: postCommentCount })}</span>
+          <span>
+            {t("postCard.commentsCount", { count: postCommentCount })}
+          </span>
         </div>
 
         <div

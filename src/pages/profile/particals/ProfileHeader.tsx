@@ -93,14 +93,14 @@ export default function ProfileHeaderCard({
   }
 
   return (
-    <section className="overflow-hidden rounded-[2rem] border border-app bg-surface shadow-surface">
-      <div className="h-44 bg-gradient-to-r from-slate-950 via-slate-800 to-cyan-800" />
+    <section className="overflow-hidden rounded-xl border border-app bg-surface shadow-surface">
+      <div className="h-44 bg-linear-to-r from-slate-950 via-slate-800 to-cyan-800" />
 
       <div className="px-5 pb-6 md:px-8">
         <div className="flex flex-col gap-6 pt-6 lg:flex-row lg:items-start lg:justify-between">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
             <div className="-mt-24 shrink-0">
-              <div className="group relative h-36 w-36 overflow-hidden rounded-[2rem] border-4 border-surface-elevated bg-surface-strong shadow-lg">
+              <div className="group relative h-36 w-36 overflow-hidden rounded-full border-4 border-surface-elevated bg-surface-strong shadow-lg">
                 {imageSrc ? (
                   <img
                     src={imageSrc}
@@ -153,7 +153,7 @@ export default function ProfileHeaderCard({
                   className="mt-2 w-full rounded-2xl border border-app bg-surface-elevated px-4 py-3 text-xl font-bold text-app outline-none focus:border-cyan-500"
                 />
               ) : (
-                <h1 className="mt-2 break-words text-2xl font-bold text-app md:text-3xl">
+                <h1 className="mt-2 wrap-break-words text-lg font-bold text-app md:text-xl">
                   {profile.title}
                 </h1>
               )}

@@ -1,6 +1,7 @@
 import { Check, ChevronDown, Search, X } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { SkillOption } from "../../types/profile.types";
+import { getSkillsSearch } from "../../services/global.service";
 
 type Props = {
   options: SkillOption[];
@@ -10,7 +11,7 @@ type Props = {
 };
 
 export default function SkillsDropdown({
-  options,
+  // options,
   value,
   onChange,
   placeholder = "Select skills...",
@@ -36,13 +37,28 @@ export default function SkillsDropdown({
       window.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+  const [searchResults, setSearchResults] = useState<SkillOption[]>([]);
 
-  const filteredOptions = useMemo(() => {
-    return options.filter((option) =>
-      option.name.toLowerCase().includes(search.toLowerCase()),
-    );
-  }, [options, search]);
+  useEffect(() => {
+    const query = search.trim();
 
+    const timeout = setTimeout(async () => {
+      if (!query) {
+        setSearchResults([]);
+        return;
+      }
+
+      try {
+        const results = await getSkillsSearch(query);
+        setSearchResults(results);
+      } catch (error) {
+        console.error("Failed to search skills:", error);
+        setSearchResults([]);
+      }
+    }, 300);
+
+    return () => clearTimeout(timeout);
+  }, [search]);
   function isSelected(skillId: string) {
     return value.some((item) => item.id === skillId);
   }
@@ -67,19 +83,18 @@ export default function SkillsDropdown({
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="flex min-h-[58px] w-full flex-wrap items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-left shadow-sm transition hover:border-slate-300"
+        className="flex min-h-[58] w-full flex-wrap items-center gap-2 rounded-2xl border border-app bg-surface-elevated px-4 py-3 text-left shadow-sm transition hover:border-strong"
       >
         {value.length === 0 && (
-          <span className="text-sm text-slate-400">{placeholder}</span>
+          <span className="text-sm text-soft">{placeholder}</span>
         )}
 
         {value.map((skill) => (
           <div
             key={skill.id}
-            className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-3 py-1 text-sm font-medium text-white"
+            className="inline-flex items-center gap-2 rounded-xl bg-cyan-400 px-3 py-1 text-sm font-medium text-slate-950"
           >
             {skill.name}
-
             <button
               type="button"
               onClick={(e) => {
@@ -95,7 +110,7 @@ export default function SkillsDropdown({
 
         <div className="ml-auto">
           <ChevronDown
-            className={`h-5 w-5 text-slate-500 transition ${
+            className={`h-5 w-5 text-soft transition ${
               isOpen ? "rotate-180" : ""
             }`}
           />
@@ -103,28 +118,28 @@ export default function SkillsDropdown({
       </button>
 
       {isOpen && (
-        <div className="absolute left-0 top-[calc(100%+10px)] z-50 w-full overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl">
-          <div className="border-b border-slate-100 p-4">
-            <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-              <Search className="h-4 w-4 text-slate-400" />
+        <div className="absolute left-0 top-[calc(100%+10px)] z-50 w-full overflow-hidden rounded-3xl border border-app bg-surface shadow-2xl">
+          <div className="border-b border-app p-4">
+            <div className="flex items-center gap-3 rounded-2xl border border-app bg-surface-muted px-4 py-3">
+              <Search className="h-4 w-4 text-soft" />
 
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search skills..."
-                className="w-full bg-transparent text-sm outline-none placeholder:text-slate-400"
+                className="w-full bg-transparent text-sm text-app outline-none placeholder:text-soft"
               />
             </div>
           </div>
 
-          <div className="max-h-[320px] overflow-y-auto p-2">
-            {filteredOptions.length === 0 && (
-              <div className="p-4 text-center text-sm text-slate-400">
+          <div className="max-h-[320] overflow-y-auto p-2">
+            {searchResults.length === 0 && (
+              <div className="p-4 text-center text-sm text-soft">
                 No skills found.
               </div>
             )}
 
-            {filteredOptions.map((skill) => {
+            {searchResults.map((skill) => {
               const selected = isSelected(skill.id);
 
               return (
@@ -132,19 +147,21 @@ export default function SkillsDropdown({
                   key={skill.id}
                   type="button"
                   onClick={() => toggleSkill(skill)}
-                  className={`flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left transition ${
-                    selected ? "bg-slate-900 text-white" : "hover:bg-slate-50"
+                  className={`flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left transition my-1 ${
+                    selected
+                      ? "bg-cyan-400 text-slate-950"
+                      : "text-app hover:bg-surface-strong"
                   }`}
                 >
                   <div>
-                    <p className="font-medium">{skill.name}</p>
+                    <p className="font-medium text-sm">{skill.name}</p>
 
                     <p
                       className={`text-xs ${
-                        selected ? "text-slate-300" : "text-slate-400"
+                        selected ? "text-slate-800" : "text-soft"
                       }`}
                     >
-                      {skill.short_key}
+                      {/* {skill.short_key} */}
                     </p>
                   </div>
 

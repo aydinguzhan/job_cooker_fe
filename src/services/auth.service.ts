@@ -16,12 +16,15 @@ export async function registerUser(payload: RegisterPayload) {
     last_name: payload.lastName,
     email: payload.email,
     password: payload.password,
+    role: payload.role,
   };
 
-  const { data } = await apiClient.post<AuthResponse>(
-    "/auth/register",
-    requestPayload
-  );
+  const { data } = await apiClient.post("/auth/register", requestPayload);
 
-  return data;
+  return data.data;
+}
+
+export async function getLoginQr() {
+  const { data } = await apiClient.get("/auth/login-qr");
+  return data.data;
 }

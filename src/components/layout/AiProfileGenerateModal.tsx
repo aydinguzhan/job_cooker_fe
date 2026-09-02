@@ -1,5 +1,6 @@
 import { Sparkles, Send, X, Loader2, UserRound, Briefcase, Star } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "../../lang/useTranslation";
 import type { AiProfilePreview } from "../../types/profile.types";
 
 type Props = {
@@ -15,6 +16,7 @@ export default function AiProfileGenerateModal({
   onGenerate,
   onUseProfile,
 }: Props) {
+  const { t } = useTranslation();
   const [prompt, setPrompt] = useState("");
   const [preview, setPreview] = useState<AiProfilePreview | null>(null);
   const [loading, setLoading] = useState(false);
@@ -44,10 +46,10 @@ export default function AiProfileGenerateModal({
 
             <div>
               <h2 className="text-lg font-semibold text-app">
-                AI Profile Assistant
+                {t("aiProfile.modalTitle")}
               </h2>
               <p className="text-sm text-soft">
-                Prompt yaz, profil taslağını AI oluştursun.
+                {t("aiProfile.modalDescription")}
               </p>
             </div>
           </div>
@@ -63,13 +65,13 @@ export default function AiProfileGenerateModal({
         <div className="grid max-h-[70vh] grid-cols-1 overflow-y-auto lg:grid-cols-[1fr_1.2fr]">
           <div className="border-b border-app p-6 lg:border-b-0 lg:border-r">
             <label className="mb-2 block text-sm font-medium text-muted">
-              Kendini anlat
+              {t("aiProfile.promptLabel")}
             </label>
 
             <textarea
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              placeholder="Örn: 3 yıllık backend developerım. Node.js, PostgreSQL, MongoDB, RabbitMQ kullanıyorum. React tarafında da deneyimim var..."
+              placeholder={t("aiProfile.promptPlaceholder")}
               className="min-h-52 w-full resize-none rounded-2xl border border-app bg-surface-elevated px-4 py-3 text-sm text-app outline-none transition placeholder:text-soft focus:border-slate-900 focus:ring-4 focus:ring-slate-900/10"
             />
 
@@ -81,12 +83,12 @@ export default function AiProfileGenerateModal({
               {loading ? (
                 <>
                   <Loader2 className="animate-spin" size={18} />
-                  Generating...
+                  {t("aiProfile.generating")}
                 </>
               ) : (
                 <>
                   <Send size={18} />
-                  Generate Profile
+                  {t("aiProfile.generate")}
                 </>
               )}
             </button>
@@ -97,11 +99,10 @@ export default function AiProfileGenerateModal({
               <div className="flex h-full min-h-72 flex-col items-center justify-center rounded-3xl border border-dashed border-app bg-surface-elevated text-center">
                 <Sparkles className="mb-3 text-soft" size={32} />
                 <h3 className="font-medium text-app">
-                  Henüz ön izleme yok
+                  {t("aiProfile.emptyTitle")}
                 </h3>
                 <p className="mt-1 max-w-sm text-sm text-soft">
-                  Prompt yazıp generate ettiğinde AI tarafından oluşturulan profil
-                  burada görünecek.
+                  {t("aiProfile.emptyDescription")}
                 </p>
               </div>
             ) : (
@@ -109,7 +110,7 @@ export default function AiProfileGenerateModal({
                 <div className="rounded-3xl border border-app bg-surface-elevated p-5 shadow-surface">
                   <div className="mb-3 flex items-center gap-2 text-soft">
                     <UserRound size={18} />
-                    <span className="text-sm font-medium">Profile Header</span>
+                    <span className="text-sm font-medium">{t("aiProfile.profileHeader")}</span>
                   </div>
 
                   <h3 className="text-xl font-semibold text-app">
@@ -123,7 +124,7 @@ export default function AiProfileGenerateModal({
                 <div className="rounded-3xl border border-app bg-surface-elevated p-5 shadow-surface">
                   <div className="mb-3 flex items-center gap-2 text-soft">
                     <Star size={18} />
-                    <span className="text-sm font-medium">Skills</span>
+                    <span className="text-sm font-medium">{t("aiProfile.skills")}</span>
                   </div>
 
                   <div className="flex flex-wrap gap-2">
@@ -141,12 +142,12 @@ export default function AiProfileGenerateModal({
                 <div className="rounded-3xl border border-app bg-surface-elevated p-5 shadow-surface">
                   <div className="mb-3 flex items-center gap-2 text-soft">
                     <Briefcase size={18} />
-                    <span className="text-sm font-medium">Experiences</span>
+                    <span className="text-sm font-medium">{t("aiProfile.experiences")}</span>
                   </div>
 
                   {preview.experiences.length === 0 ? (
                     <p className="text-sm text-soft">
-                      Deneyim bilgisi bulunamadı.
+                      {t("aiProfile.noExperiences")}
                     </p>
                   ) : (
                     <div className="space-y-3">
@@ -159,7 +160,7 @@ export default function AiProfileGenerateModal({
                             {exp.role}
                           </h4>
                           <p className="text-sm text-soft">
-                            {exp.company ?? "Company not specified"}
+                            {exp.company ?? t("aiProfile.companyFallback")}
                           </p>
                           <p className="mt-2 text-sm text-muted">
                             {exp.description}
@@ -175,14 +176,14 @@ export default function AiProfileGenerateModal({
                     onClick={onClose}
                     className="rounded-2xl border border-app bg-surface px-4 py-2 text-sm font-medium text-muted transition hover:bg-surface-strong hover:text-app"
                   >
-                    Cancel
+                    {t("aiProfile.cancel")}
                   </button>
 
                   <button
                     onClick={() => onUseProfile(preview)}
                     className="rounded-2xl bg-slate-900 px-5 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
                   >
-                    Use this profile
+                    {t("aiProfile.useProfile")}
                   </button>
                 </div>
               </div>

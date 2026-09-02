@@ -1,5 +1,12 @@
 import { NavLink } from "react-router-dom";
-import { LayoutDashboard, User, Users ,LandPlot} from "lucide-react";
+import {
+  LayoutDashboard,
+  User,
+  Users,
+  LandPlot,
+  Network,
+  MessageSquare,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "../../lang/useTranslation";
 import { getNavigation } from "../../services/navigation.service";
@@ -17,7 +24,9 @@ const iconMap = {
   LayoutDashboard,
   User,
   Users,
-  LandPlot
+  Network,
+  LandPlot,
+  MessageSquare,
 };
 export default function Sidebar({ isOpen }: SidebarProps) {
   const { t } = useTranslation();
@@ -29,6 +38,7 @@ export default function Sidebar({ isOpen }: SidebarProps) {
     if (normalizedLabel.includes("dashboard")) return t("common.dashboard");
     if (normalizedLabel.includes("profile")) return t("common.profile");
     if (normalizedLabel.includes("network")) return t("common.network");
+    if (normalizedLabel.includes("message")) return t("common.messages");
     if (normalizedLabel.includes("save")) return t("savedPosts.eyebrow");
 
     return label;

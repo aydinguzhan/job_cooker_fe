@@ -58,7 +58,9 @@ export default function Profile() {
         }
 
         if (skillsResult.status === "fulfilled") {
-          setSkillOptions(Array.isArray(skillsResult.value) ? skillsResult.value : []);
+          setSkillOptions(
+            Array.isArray(skillsResult.value) ? skillsResult.value : [],
+          );
         } else {
           console.error("Skills fetch error:", skillsResult.reason);
           setSkillOptions([]);
@@ -100,7 +102,9 @@ export default function Profile() {
     return nextAiDraft;
   }
 
-  async function handleCreateProfile(payload: Parameters<typeof createProfile>[0]) {
+  async function handleCreateProfile(
+    payload: Parameters<typeof createProfile>[0],
+  ) {
     try {
       setIsCreatingProfile(true);
       const createdProfile = await createProfile(payload);
@@ -125,7 +129,10 @@ export default function Profile() {
       setIsApplyingAiProfile(true);
 
       if (!profile) {
-        const { payload } = mapAiProfileToCreatePayload(aiProfile, skillOptions);
+        const { payload } = mapAiProfileToCreatePayload(
+          aiProfile,
+          skillOptions,
+        );
         const createdProfile = await createProfile(payload);
         setProfile(createdProfile);
         setIsCreateMode(false);
@@ -256,7 +263,6 @@ export default function Profile() {
             setEditingSection(null);
           }}
         />
-
         <div className="grid grid-cols-1 gap-6 xl:grid-cols-[380px_minmax(0,1fr)]">
           <aside className="space-y-6">
             <SkillsCard
@@ -266,7 +272,6 @@ export default function Profile() {
               onEdit={() => setEditingSection("skills")}
               onCancel={() => setEditingSection(null)}
               onSave={async (payload) => {
-                console.log("skills update payload:", payload);
                 setIsLoading(true);
                 const profile = await updateProfileSkills({ skills: payload });
                 setProfile(profile);
