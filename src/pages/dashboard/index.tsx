@@ -59,14 +59,10 @@ export default function DashBoard() {
 
   return (
     <section className="mx-auto max-w-3xl space-y-6 ">
-      <div className="bg-white p-4 rounded-xl">
+      <div className="bg-surface p-4 rounded-xl">
         <h2 className="text-lg font-semibold text-app">
           {t("dashboardPage.feedTitle")}
         </h2>
-
-        <p className="text-sm text-soft">
-          {t("dashboardPage.feedDescription")}
-        </p>
       </div>
       <div className="rounded-xl border border-app bg-surface p-5 shadow-surface">
         <div className="space-y-3">

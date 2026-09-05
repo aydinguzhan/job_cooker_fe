@@ -34,9 +34,12 @@ function buildFullName(user: Pick<FollowUser, "first_name" | "last_name">) {
   return `${user.first_name} ${user.last_name}`.trim();
 }
 
-function getConversationDisplayName(conversation: MessageConversation, t: (key: string) => string) {
-  const fullName = `${conversation.participant_first_name ?? ""} ${conversation.participant_last_name ?? ""}`
-    .trim();
+function getConversationDisplayName(
+  conversation: MessageConversation,
+  t: (key: string) => string,
+) {
+  const fullName =
+    `${conversation.participant_first_name ?? ""} ${conversation.participant_last_name ?? ""}`.trim();
 
   return fullName || conversation.subject || t("messages.untitledConversation");
 }
@@ -244,10 +247,11 @@ export default function MessagesPage() {
     sidebarPage * SIDEBAR_PAGE_SIZE,
   );
 
-  const activeFollowing =
-    activeConversation?.participant_id
-      ? followings.find((following) => following.id === activeConversation.participant_id) ?? null
-      : null;
+  const activeFollowing = activeConversation?.participant_id
+    ? (followings.find(
+        (following) => following.id === activeConversation.participant_id,
+      ) ?? null)
+    : null;
 
   async function handleStartConversation(following: FollowUser) {
     const existingConversation = conversations.find(
@@ -359,9 +363,7 @@ export default function MessagesPage() {
   }
 
   if (isBooting) {
-    return (
-      <MessageLoading/>
-    );
+    return <MessageLoading />;
   }
 
   return (
@@ -375,7 +377,6 @@ export default function MessagesPage() {
 
         <section className="flex h-[calc(100vh-7.75rem)] overflow-hidden rounded-[1.5rem] border border-app bg-surface shadow-surface">
           <aside className="flex h-full w-[320px] shrink-0 flex-col overflow-hidden border-r border-app bg-[linear-gradient(180deg,var(--surface)_0%,var(--surface-muted)_100%)]">
-            
             <div className="border-b border-app bg-[linear-gradient(180deg,var(--surface-elevated)_0%,var(--surface-muted)_100%)] px-4 py-4">
               <h1 className="text-lg font-semibold tracking-tight text-app">
                 {t("messages.sidebarTitle")}
@@ -440,7 +441,7 @@ export default function MessagesPage() {
 
               <div className="min-h-0 flex-1 space-y-2 overflow-hidden">
                 {visibleSidebarItems.length === 0 ? (
-                  <div className="rounded-[1rem] border border-dashed border-app bg-surface-muted px-3 py-6 text-center text-xs text-soft">
+                  <div className="rounded-[1] border border-dashed border-app bg-surface-muted px-3 py-6 text-center text-xs text-soft">
                     {activeTab === "conversations"
                       ? t("messages.emptyChats")
                       : t("messages.emptyFollowing")}
@@ -470,9 +471,9 @@ export default function MessagesPage() {
                             : handleStartConversation(item.following)
                         }
                         disabled={isPending}
-                        className={`relative flex w-full items-center gap-3 rounded-[1rem] border px-3 py-3 text-left transition disabled:cursor-not-allowed disabled:opacity-60 ${
+                        className={`relative flex w-full items-center gap-3 rounded-lg border px-3 py-3 text-left transition disabled:cursor-not-allowed disabled:opacity-60 ${
                           isActive
-                            ? "border-cyan-200 bg-[linear-gradient(135deg,rgba(6,182,212,0.10)_0%,rgba(255,255,255,0.96)_42%,rgba(255,255,255,0.98)_100%)] shadow-[0_14px_34px_-24px_rgba(8,145,178,0.45)] ring-1 ring-cyan-100"
+                            ? "border-cyan-200 bg-surface-storng "
                             : "border-app bg-surface-muted hover:border-strong hover:bg-surface-elevated"
                         }`}
                       >
@@ -529,7 +530,9 @@ export default function MessagesPage() {
                                   : "text-soft"
                             }`}
                           >
-                            {isPending ? t("messages.preparing") : item.subtitle}
+                            {isPending
+                              ? t("messages.preparing")
+                              : item.subtitle}
                           </p>
                         </div>
 
@@ -549,7 +552,9 @@ export default function MessagesPage() {
               <div className="mt-3 flex items-center justify-between">
                 <button
                   type="button"
-                  onClick={() => setSidebarPage((prev) => Math.max(1, prev - 1))}
+                  onClick={() =>
+                    setSidebarPage((prev) => Math.max(1, prev - 1))
+                  }
                   disabled={sidebarPage === 1}
                   className="inline-flex items-center gap-1.5 rounded-lg border border-app bg-surface px-2.5 py-1.5 text-xs text-muted transition hover:bg-surface-elevated hover:text-app disabled:cursor-not-allowed disabled:opacity-50"
                 >
@@ -567,7 +572,9 @@ export default function MessagesPage() {
                 <button
                   type="button"
                   onClick={() =>
-                    setSidebarPage((prev) => Math.min(sidebarTotalPages, prev + 1))
+                    setSidebarPage((prev) =>
+                      Math.min(sidebarTotalPages, prev + 1),
+                    )
                   }
                   disabled={sidebarPage === sidebarTotalPages}
                   className="inline-flex items-center gap-1.5 rounded-lg border border-app bg-surface px-2.5 py-1.5 text-xs text-muted transition hover:bg-surface-elevated hover:text-app disabled:cursor-not-allowed disabled:opacity-50"
@@ -583,14 +590,23 @@ export default function MessagesPage() {
             <div className="flex items-center justify-between border-b border-app bg-[linear-gradient(180deg,var(--surface-elevated)_0%,var(--surface-muted)_100%)] px-5 py-4">
               <div className="flex min-w-0 items-center gap-3">
                 <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-surface-strong text-sm font-semibold text-soft">
-                  {resolveFileUrl(activeFollowing?.profile_image_path ?? null) ? (
+                  {resolveFileUrl(
+                    activeFollowing?.profile_image_path ?? null,
+                  ) ? (
                     <img
-                      src={resolveFileUrl(activeFollowing?.profile_image_path ?? null)}
-                      alt={activeConversation?.subject || t("messages.selectConversation")}
+                      src={resolveFileUrl(
+                        activeFollowing?.profile_image_path ?? null,
+                      )}
+                      alt={
+                        activeConversation?.subject ||
+                        t("messages.selectConversation")
+                      }
                       className="h-full w-full object-cover"
                     />
                   ) : activeConversation?.subject ? (
-                    getInitials(getConversationDisplayName(activeConversation, t))
+                    getInitials(
+                      getConversationDisplayName(activeConversation, t),
+                    )
                   ) : (
                     <UserRound className="h-4 w-4" />
                   )}
@@ -617,9 +633,9 @@ export default function MessagesPage() {
               </span>
             </div>
 
-            <div className="min-h-0 flex-1 overflow-y-auto bg-[linear-gradient(180deg,rgba(248,251,255,0.65)_0%,rgba(243,247,251,0.95)_100%)] px-4 py-4">
+            <div className="min-h-0 flex-1 overflow-y-auto  px-4 py-4">
               {!activeConversation ? (
-                <div className="flex h-full min-h-[320px] flex-col items-center justify-center rounded-[1.75rem] border border-dashed border-app bg-surface px-6 text-center">
+                <div className="flex h-full min-h-[320] flex-col items-center justify-center rounded-[1.75rem] border border-dashed border-app bg-surface px-6 text-center">
                   <MessageCircle className="h-12 w-12 text-soft" />
                   <p className="mt-4 text-lg font-semibold text-app">
                     {t("messages.selectRecipient")}
@@ -629,11 +645,11 @@ export default function MessagesPage() {
                   </p>
                 </div>
               ) : isLoadingMessages ? (
-                <div className="flex h-full min-h-[320px] items-center justify-center text-sm text-soft">
+                <div className="flex h-full min-h-[320] items-center justify-center text-sm text-soft">
                   {t("messages.loadingThread")}
                 </div>
               ) : messages.length === 0 ? (
-                <div className="flex h-full min-h-[320px] flex-col items-center justify-center rounded-[1.75rem] border border-dashed border-app bg-surface px-6 text-center">
+                <div className="flex h-full min-h-[320] flex-col items-center justify-center rounded-[1.75rem] border border-dashed border-app bg-surface px-6 text-center">
                   <MessageCircle className="h-12 w-12 text-soft" />
                   <p className="mt-4 text-lg font-semibold text-app">
                     {t("messages.noMessagesTitle")}
@@ -709,7 +725,6 @@ export default function MessagesPage() {
               </div>
             </div>
           </section>
-          
         </section>
       </div>
     </main>

@@ -6,6 +6,7 @@ import {
   LandPlot,
   Network,
   MessageSquare,
+  Handshake,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "../../lang/useTranslation";
@@ -27,6 +28,7 @@ const iconMap = {
   Network,
   LandPlot,
   MessageSquare,
+  Handshake,
 };
 export default function Sidebar({ isOpen }: SidebarProps) {
   const { t } = useTranslation();
@@ -40,6 +42,7 @@ export default function Sidebar({ isOpen }: SidebarProps) {
     if (normalizedLabel.includes("network")) return t("common.network");
     if (normalizedLabel.includes("message")) return t("common.messages");
     if (normalizedLabel.includes("save")) return t("savedPosts.eyebrow");
+    if (normalizedLabel.includes("jobs")) return t("jobs.jobs");
 
     return label;
   }
