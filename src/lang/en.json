@@ -230,5 +230,8 @@
     "threadError": "Conversation details could not be loaded.",
     "sendError": "Message could not be sent.",
     "createConversationError": "A new conversation could not be started."
+  },
+    "jobs":{
+    "jobs":"Jobs"
   }
 }

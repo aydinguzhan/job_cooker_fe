@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import type { ProfileExperience } from "../../../types/profile.types";
+import { UUID } from "../../../lib/utils";
 
 type ExperiencePayload = {
   company_name: string;
@@ -29,7 +30,7 @@ type Props = {
 };
 
 const emptyExperience: ProfileExperience = {
-  id: crypto.randomUUID(),
+  id: UUID(),
   profile_id: "",
   company_name: "",
   company_location: "",
@@ -85,7 +86,7 @@ export default function ExperiencesCard({
       ...prev,
       {
         ...emptyExperience,
-        id: crypto.randomUUID(),
+        id: UUID(),
       },
     ]);
   }
@@ -93,7 +94,7 @@ export default function ExperiencesCard({
   function updateExperience(
     id: string,
     field: keyof ExperiencePayload,
-    value: string | boolean | null
+    value: string | boolean | null,
   ) {
     setLocalExperiences((prev) =>
       prev.map((item) =>
@@ -105,8 +106,8 @@ export default function ExperiencesCard({
                 ? { end_date: null }
                 : {}),
             }
-          : item
-      )
+          : item,
+      ),
     );
   }
 
@@ -116,7 +117,7 @@ export default function ExperiencesCard({
         (item) =>
           item.company_name.trim() &&
           item.position_title.trim() &&
-          item.start_date
+          item.start_date,
       )
       .map((item) => ({
         company_name: item.company_name.trim(),
@@ -198,11 +199,7 @@ export default function ExperiencesCard({
                   <input
                     value={exp.position_title}
                     onChange={(e) =>
-                      updateExperience(
-                        exp.id,
-                        "position_title",
-                        e.target.value
-                      )
+                      updateExperience(exp.id, "position_title", e.target.value)
                     }
                     placeholder="Position title"
                     className="rounded-2xl border border-app bg-surface-elevated px-4 py-3 text-sm text-app outline-none focus:border-cyan-500"
@@ -221,11 +218,7 @@ export default function ExperiencesCard({
                 <input
                   value={exp.company_location ?? ""}
                   onChange={(e) =>
-                    updateExperience(
-                      exp.id,
-                      "company_location",
-                      e.target.value
-                    )
+                    updateExperience(exp.id, "company_location", e.target.value)
                   }
                   placeholder="Company location"
                   className="w-full rounded-2xl border border-app bg-surface-elevated px-4 py-3 text-sm text-app outline-none focus:border-cyan-500"
@@ -267,11 +260,7 @@ export default function ExperiencesCard({
                     type="checkbox"
                     checked={exp.is_current}
                     onChange={(e) =>
-                      updateExperience(
-                        exp.id,
-                        "is_current",
-                        e.target.checked
-                      )
+                      updateExperience(exp.id, "is_current", e.target.checked)
                     }
                     className="h-4 w-4 accent-slate-900"
                   />

@@ -24,9 +24,15 @@ import {
 import { useTranslation } from "../../lang/useTranslation";
 import { setAccessToken } from "../../lib/auth";
 import { login, registerUser } from "../../services/auth.service";
-import { resolveFileUrl, uploadProfileImage } from "../../services/file.service";
+import {
+  resolveFileUrl,
+  uploadProfileImage,
+} from "../../services/file.service";
 import { getSkills } from "../../services/global.service";
-import { createProfile, generateAiProfile } from "../../services/profile.service";
+import {
+  createProfile,
+  generateAiProfile,
+} from "../../services/profile.service";
 import {
   registerOnboardingSchema,
   type RegisterOnboardingFormValues,
@@ -117,7 +123,9 @@ export default function Register() {
   const selectedSkillOptions = useMemo(
     () =>
       selectedSkills
-        .map((skill) => skillOptions.find((option) => option.id === skill.skill_id))
+        .map((skill) =>
+          skillOptions.find((option) => option.id === skill.skill_id),
+        )
         .filter((skill): skill is SkillOption => Boolean(skill)),
     [selectedSkills, skillOptions],
   );
@@ -179,7 +187,7 @@ export default function Register() {
     );
     replaceExperiences(
       form.experiences.map((experience) => ({
-        id: crypto.randomUUID(),
+        id: UUID()(),
         profile_id: "",
         company_name: experience.company_name,
         company_location: experience.company_location,
@@ -193,7 +201,7 @@ export default function Register() {
     );
     replaceReferences(
       form.references.map((reference) => ({
-        id: crypto.randomUUID(),
+        id: UUID()(),
         profile_id: "",
         first_name: reference.first_name,
         last_name: reference.last_name,
@@ -719,12 +727,16 @@ export default function Register() {
                       <div className="grid gap-3">
                         <Input
                           label={t("registerFlow.companyName")}
-                          error={errors.experiences?.[index]?.company_name?.message}
+                          error={
+                            errors.experiences?.[index]?.company_name?.message
+                          }
                           {...register(`experiences.${index}.company_name`)}
                         />
                         <Input
                           label={t("registerFlow.positionTitle")}
-                          error={errors.experiences?.[index]?.position_title?.message}
+                          error={
+                            errors.experiences?.[index]?.position_title?.message
+                          }
                           {...register(`experiences.${index}.position_title`)}
                         />
                         <Input
@@ -735,7 +747,9 @@ export default function Register() {
                           <Input
                             type="date"
                             label={t("registerFlow.startDate")}
-                            error={errors.experiences?.[index]?.start_date?.message}
+                            error={
+                              errors.experiences?.[index]?.start_date?.message
+                            }
                             {...register(`experiences.${index}.start_date`)}
                           />
                           <Input
@@ -808,7 +822,9 @@ export default function Register() {
                       <div className="grid gap-3 md:grid-cols-2">
                         <Input
                           label={t("registerFlow.referenceFirstName")}
-                          error={errors.references?.[index]?.first_name?.message}
+                          error={
+                            errors.references?.[index]?.first_name?.message
+                          }
                           {...register(`references.${index}.first_name`)}
                         />
                         <Input

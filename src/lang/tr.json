@@ -230,5 +230,8 @@
     "threadError": "Konusma detaylari yuklenemedi.",
     "sendError": "Mesaj gonderilemedi.",
     "createConversationError": "Yeni konusma baslatilamadi."
+  },
+  "jobs":{
+    "jobs":"İş Ara"
   }
 }

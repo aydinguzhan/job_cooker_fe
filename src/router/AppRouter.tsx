@@ -14,6 +14,8 @@ import PublicRoute from "../components/router/PublicRoute";
 import AppLayout from "../components/layout/Applayout";
 import PostDetailCard from "../pages/postDetail";
 import MessagesPage from "../pages/messages";
+import QrLogin from "../pages/qrlogin/QrLogin";
+import Jobs from "../pages/jobs";
 
 const router = createBrowserRouter([
   {
@@ -97,6 +99,20 @@ const router = createBrowserRouter([
         </AppLayout>
       </ProtectedRoute>
     ),
+  },
+  {
+    path: "/jobs",
+    element: (
+      <ProtectedRoute>
+        <AppLayout>
+          <Jobs />
+        </AppLayout>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/qr-login",
+    element: <QrLogin />,
   },
 ]);
 

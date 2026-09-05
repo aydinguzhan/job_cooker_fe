@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import type { ProfileReference } from "../../../types/profile.types";
+import { UUID } from "../../../lib/utils";
 
 type ReferencePayload = {
   first_name: string;
@@ -29,7 +30,7 @@ type Props = {
 };
 
 const emptyReference: ProfileReference = {
-  id: crypto.randomUUID(),
+  id: UUID(),
   profile_id: "",
   first_name: "",
   last_name: "",
@@ -69,7 +70,7 @@ export default function ReferencesCard({
       ...prev,
       {
         ...emptyReference,
-        id: crypto.randomUUID(),
+        id: UUID(),
       },
     ]);
   }
@@ -77,7 +78,7 @@ export default function ReferencesCard({
   function updateReference(
     id: string,
     field: keyof ReferencePayload,
-    value: string
+    value: string,
   ) {
     setLocalReferences((prev) =>
       prev.map((item) =>
@@ -86,8 +87,8 @@ export default function ReferencesCard({
               ...item,
               [field]: value,
             }
-          : item
-      )
+          : item,
+      ),
     );
   }
 

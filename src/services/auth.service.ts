@@ -28,3 +28,9 @@ export async function getLoginQr() {
   const { data } = await apiClient.get("/auth/login-qr");
   return data.data;
 }
+
+// QR kodun telefondan okutulup onaylanmadığını sorgulayan yeni metot
+export async function checkQrStatus(code: string) {
+  const { data } = await apiClient.get(`/auth/qr-status?code=${code}`);
+  return data; // { status: 'PENDING' | 'SUCCESS' | 'EXPIRED', accessToken?, user? }
+}

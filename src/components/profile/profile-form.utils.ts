@@ -1,3 +1,4 @@
+import { UUID } from "../../lib/utils";
 import type {
   AiProfilePreview,
   CreateProfilePayload,
@@ -29,7 +30,7 @@ export function createEmptyProfileFormState(): CreateProfileFormState {
 
 export function createEmptyExperience(): ProfileExperience {
   return {
-    id: crypto.randomUUID(),
+    id: UUID(),
     profile_id: "",
     company_name: "",
     company_location: "",
@@ -44,7 +45,7 @@ export function createEmptyExperience(): ProfileExperience {
 
 export function createEmptyReference(): ProfileReference {
   return {
-    id: crypto.randomUUID(),
+    id: UUID(),
     profile_id: "",
     first_name: "",
     last_name: "",
@@ -107,7 +108,7 @@ export function mapAiProfileToFormState(
       profile_image_path: null,
       skills: matchedSkills,
       experiences: profile.experiences.map((experience) => ({
-        id: crypto.randomUUID(),
+        id: UUID(),
         profile_id: "",
         company_name: experience.company ?? "",
         company_location: "",
@@ -122,7 +123,7 @@ export function mapAiProfileToFormState(
         const { first_name, last_name } = splitReferenceName(reference.name);
 
         return {
-          id: crypto.randomUUID(),
+          id: UUID(),
           profile_id: "",
           first_name,
           last_name,

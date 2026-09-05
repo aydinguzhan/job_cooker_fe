@@ -36,7 +36,7 @@ export default function Button({
 
   return (
     <button
-      className={`${base} ${variants[variant]} ${sizes[size]} ${
+      className={`hover:cursor-pointer ${base} ${variants[variant]} ${sizes[size]} ${
         fullWidth ? "w-full" : "w-auto"
       } ${className}`}
       {...props}
