@@ -6,10 +6,10 @@ type Props = {
     id: string;
     title: string;
     companyName: string;
-    suitabilityRate: string;
-    advertiserInfo: {
-      name: string;
-      lastname: string;
+    suitability_rate: string;
+    advertiser: {
+      first_name: string;
+      last_name: string;
       company: string;
       bio: string;
     };
@@ -20,14 +20,8 @@ type Props = {
 };
 
 export default function JobsCard({ jobInfo, compact = false, onClick }: Props) {
-  const {
-    id,
-    title,
-    companyName,
-    advertiserInfo,
-    description,
-    suitabilityRate,
-  } = jobInfo;
+  const { id, title, companyName, advertiser, description, suitability_rate } =
+    jobInfo;
   return (
     <div
       className={`rounded-lg flex flex-col justify-start  flex-1  ${compact && "border"}`}
@@ -49,7 +43,7 @@ export default function JobsCard({ jobInfo, compact = false, onClick }: Props) {
                 size={14}
                 key={index.toString()}
                 className={
-                  index <= +suitabilityRate - 1
+                  index <= +suitability_rate - 1
                     ? "fill-amber-400 text-amber-400"
                     : ""
                 }
@@ -60,7 +54,7 @@ export default function JobsCard({ jobInfo, compact = false, onClick }: Props) {
           {!compact && (
             <>
               <div className="font-extralight ">
-                {advertiserInfo.name + " " + advertiserInfo.lastname}
+                {advertiser.first_name + " " + advertiser.last_name}
               </div>
               <div className="first-letter:text-2xl leading-loose ">
                 {description}
