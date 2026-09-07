@@ -32,7 +32,7 @@ export default function Jobs() {
   return (
     <div className="flex h-screen flex-col gap-2">
       <div className="shrink-0 rounded-lg bg-surface p-4 text-lg font-semibold text-zinc-50">
-        <div>Jobs</div>
+        <div className="text-lg font-semibold text-app">Jobs</div>
       </div>
       <div className="flex min-h-0 flex-1 gap-2 bg-surface">
         <div className="min-h-0 flex-1 overflow-y-auto rounded-lg border">
