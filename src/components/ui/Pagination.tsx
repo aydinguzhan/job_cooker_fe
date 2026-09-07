@@ -1,3 +1,4 @@
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import React from "react";
 
 interface PaginationProps {
@@ -15,7 +16,6 @@ export const Pagination: React.FC<PaginationProps> = ({
   onPageChange,
 }) => {
   const { page, totalPages } = pagination;
-  console.log(totalPages);
 
   if (totalPages <= 1) return null;
 
@@ -47,18 +47,15 @@ export const Pagination: React.FC<PaginationProps> = ({
 
   return (
     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 py-4 px-2 border-t border-gray-100">
-      {/* Sağ Taraf: Butonlar */}
       <div className="flex items-center gap-1">
-        {/* Önceki Sayfa */}
         <button
           onClick={() => onPageChange(page - 1)}
           disabled={page === 1}
           className="px-3 py-1.5 text-sm font-medium rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
-          Önceki
+          <ChevronLeft />
         </button>
 
-        {/* Sayfa Numaraları */}
         <div className="flex items-center gap-1">
           {getPageNumbers().map((p, idx) =>
             p === "..." ? (
@@ -72,7 +69,7 @@ export const Pagination: React.FC<PaginationProps> = ({
               <button
                 key={`page-${p}`}
                 onClick={() => onPageChange(p as number)}
-                className={`min-w-[36px] h-9 px-3 text-sm font-medium rounded-lg transition-colors ${
+                className={`min-w-[36] h-9 px-3 text-sm font-medium rounded-lg transition-colors ${
                   page === p
                     ? "bg-blue-600 text-white shadow-sm"
                     : "text-gray-600 hover:bg-gray-100 border border-transparent"
@@ -84,13 +81,12 @@ export const Pagination: React.FC<PaginationProps> = ({
           )}
         </div>
 
-        {/* Sonraki Sayfa */}
         <button
           onClick={() => onPageChange(page + 1)}
           disabled={page === totalPages}
           className="px-3 py-1.5 text-sm font-medium rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
-          Sonraki
+          <ChevronRight />
         </button>
       </div>
     </div>
