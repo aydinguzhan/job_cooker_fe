@@ -144,7 +144,7 @@ export type UpdateProfileExperiencesPayload = {
   }[];
 };
 
-export type SkillOption = {
+export type Option = {
   id: string;
   name: string;
   short_key: string;

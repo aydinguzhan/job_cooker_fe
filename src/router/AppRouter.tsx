@@ -16,6 +16,7 @@ import PostDetailCard from "../pages/postDetail";
 import MessagesPage from "../pages/messages";
 import QrLogin from "../pages/qrlogin/QrLogin";
 import Jobs from "../pages/jobs";
+import RecruiterJob from "../pages/jobs/RecruiterJob";
 
 const router = createBrowserRouter([
   {
@@ -106,6 +107,16 @@ const router = createBrowserRouter([
       <ProtectedRoute>
         <AppLayout>
           <Jobs />
+        </AppLayout>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/recruiter",
+    element: (
+      <ProtectedRoute>
+        <AppLayout>
+          <RecruiterJob />
         </AppLayout>
       </ProtectedRoute>
     ),

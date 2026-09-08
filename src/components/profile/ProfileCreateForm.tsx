@@ -18,7 +18,7 @@ import {
   resolveFileUrl,
   uploadProfileImage,
 } from "../../services/file.service";
-import SkillsDropdown from "../ui/SkillsDropDown";
+import SkillsDropdown from "../ui/DropDown";
 import Button from "../ui/Button";
 import {
   createEmptyExperience,
@@ -32,7 +32,9 @@ import {
 type Props = {
   skillOptions: SkillOption[];
   isSubmitting: boolean;
-  onSubmit: (payload: ReturnType<typeof mapFormStateToCreatePayload>) => Promise<void>;
+  onSubmit: (
+    payload: ReturnType<typeof mapFormStateToCreatePayload>,
+  ) => Promise<void>;
   onOpenAiAssistant: () => void;
   aiDraft: AiProfilePreview | null;
   onAiDraftApplied?: () => void;
@@ -116,7 +118,9 @@ export default function ProfileCreateForm({
   }
 
   function handleSkillChange(nextSelectedSkills: SkillOption[]) {
-    const currentSkillMap = new Map(form.skills.map((skill) => [skill.id, skill]));
+    const currentSkillMap = new Map(
+      form.skills.map((skill) => [skill.id, skill]),
+    );
 
     updateForm(
       "skills",
@@ -246,7 +250,8 @@ export default function ProfileCreateForm({
         <div className="px-6 py-6 md:px-8">
           {unmatchedSkills.length > 0 && (
             <div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-              Eşleşmeyen AI skill kayıtları atlandı: {unmatchedSkills.join(", ")}
+              Eşleşmeyen AI skill kayıtları atlandı:{" "}
+              {unmatchedSkills.join(", ")}
             </div>
           )}
 
@@ -361,7 +366,9 @@ export default function ProfileCreateForm({
                       <p className="truncate font-semibold text-slate-800">
                         {skill.name}
                       </p>
-                      <p className="text-xs text-slate-500">{skill.short_key}</p>
+                      <p className="text-xs text-slate-500">
+                        {skill.short_key}
+                      </p>
                     </div>
 
                     <button
@@ -443,7 +450,9 @@ export default function ProfileCreateForm({
                       onClick={() =>
                         updateForm(
                           "references",
-                          form.references.filter((item) => item.id !== reference.id),
+                          form.references.filter(
+                            (item) => item.id !== reference.id,
+                          ),
                         )
                       }
                       className="rounded-xl bg-red-50 p-2 text-red-500 transition hover:bg-red-100"
@@ -508,7 +517,11 @@ export default function ProfileCreateForm({
                       <input
                         value={reference.email ?? ""}
                         onChange={(event) =>
-                          updateReference(reference.id, "email", event.target.value)
+                          updateReference(
+                            reference.id,
+                            "email",
+                            event.target.value,
+                          )
                         }
                         placeholder="Email"
                         className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-cyan-500"
@@ -516,7 +529,11 @@ export default function ProfileCreateForm({
                       <input
                         value={reference.phone ?? ""}
                         onChange={(event) =>
-                          updateReference(reference.id, "phone", event.target.value)
+                          updateReference(
+                            reference.id,
+                            "phone",
+                            event.target.value,
+                          )
                         }
                         placeholder="Phone"
                         className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-cyan-500"
@@ -533,8 +550,12 @@ export default function ProfileCreateForm({
           <section className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm">
             <div className="mb-5 flex items-start justify-between gap-4">
               <div>
-                <h2 className="text-lg font-bold text-slate-950">Experiences</h2>
-                <p className="text-sm text-slate-500">Geçmiş rollerin ve işler</p>
+                <h2 className="text-lg font-bold text-slate-950">
+                  Experiences
+                </h2>
+                <p className="text-sm text-slate-500">
+                  Geçmiş rollerin ve işler
+                </p>
               </div>
 
               <Button
@@ -592,7 +613,9 @@ export default function ProfileCreateForm({
                       onClick={() =>
                         updateForm(
                           "experiences",
-                          form.experiences.filter((item) => item.id !== experience.id),
+                          form.experiences.filter(
+                            (item) => item.id !== experience.id,
+                          ),
                         )
                       }
                       className="rounded-xl bg-red-50 p-2 text-red-500 transition hover:bg-red-100"
@@ -718,7 +741,9 @@ export default function ProfileCreateForm({
                 type="button"
                 variant="primary"
                 fullWidth={false}
-                disabled={isSubmitting || isImageUploading || !form.title.trim()}
+                disabled={
+                  isSubmitting || isImageUploading || !form.title.trim()
+                }
                 onClick={handleSubmit}
                 className="min-w-44 gap-2 rounded-2xl px-6"
               >

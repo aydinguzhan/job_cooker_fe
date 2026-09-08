@@ -1,11 +1,12 @@
 import { Check, Pencil, Star, Trash2, X } from "lucide-react";
 import { useMemo, useState } from "react";
-import type { ProfileSkill, SkillOption } from "../../../types/profile.types";
-import SkillsDropdown from "../../../components/ui/SkillsDropDown";
+import type { ProfileSkill, Option } from "../../../types/profile.types";
+import Dropdown from "../../../components/ui/DropDown";
+import { getSkillsSearch } from "../../../services/global.service";
 
 type Props = {
   skills: ProfileSkill[];
-  skillOptions: SkillOption[];
+  skillOptions: Option[];
   isEditing: boolean;
   onEdit: () => void;
   onCancel: () => void;
@@ -26,14 +27,14 @@ export default function SkillsCard({
   onSave,
 }: Props) {
   const [localSkills, setLocalSkills] = useState<ProfileSkill[]>(skills);
-  const [selectedSkills, setSelectedSkills] = useState<SkillOption[]>([]);
+  const [selectedSkills, setSelectedSkills] = useState<Option[]>([]);
 
   const selectedSkillIds = useMemo(
     () => new Set(selectedSkills.map((skill) => skill.id)),
     [selectedSkills],
   );
 
-  function mapSkillsToOptions(items: ProfileSkill[]): SkillOption[] {
+  function mapSkillsToOptions(items: ProfileSkill[]): Option[] {
     return items.map((skill) => ({
       id: skill.id,
       name: skill.name,
@@ -58,7 +59,7 @@ export default function SkillsCard({
     setLocalSkills((prev) => prev.filter((skill) => skill.id !== skillId));
   }
 
-  function handleDropdownChange(nextSelectedSkills: SkillOption[]) {
+  function handleDropdownChange(nextSelectedSkills: Option[]) {
     setSelectedSkills(nextSelectedSkills);
 
     setLocalSkills((prev) => {
@@ -143,11 +144,12 @@ export default function SkillsCard({
 
       {isEditing && (
         <div className="mb-4">
-          <SkillsDropdown
+          <Dropdown
             options={skillOptions}
             value={selectedSkills}
             onChange={handleDropdownChange}
             placeholder="Select skills..."
+            handleQuery={async (query: string) => await getSkillsSearch(query)}
           />
         </div>
       )}

@@ -15,7 +15,6 @@ import AuthLayout from "../../components/layout/AuthLayout";
 import AiProfileGenerateModal from "../../components/layout/AiProfileGenerateModal";
 import Stepper, { type StepItem } from "../../components/stepper/Stepper";
 import Input from "../../components/ui/Input";
-import SkillsDropdown from "../../components/ui/SkillsDropDown";
 import {
   createEmptyExperience,
   createEmptyReference,
@@ -28,7 +27,7 @@ import {
   resolveFileUrl,
   uploadProfileImage,
 } from "../../services/file.service";
-import { getSkills } from "../../services/global.service";
+import { getSkills, getSkillsSearch } from "../../services/global.service";
 import {
   createProfile,
   generateAiProfile,
@@ -37,7 +36,9 @@ import {
   registerOnboardingSchema,
   type RegisterOnboardingFormValues,
 } from "../../schemas/auth.schema";
-import type { AiProfilePreview, SkillOption } from "../../types/profile.types";
+import type { AiProfilePreview, Option } from "../../types/profile.types";
+import Dropdown from "../../components/ui/DropDown";
+import { UUID } from "../../lib/utils";
 
 const STEP_ACCOUNT_FIELDS: Array<keyof RegisterOnboardingFormValues> = [
   "firstName",
@@ -63,7 +64,7 @@ export default function Register() {
     "skills" | "experiences" | "references"
   >("skills");
   const [bootstrappedAuth, setBootstrappedAuth] = useState(false);
-  const [skillOptions, setSkillOptions] = useState<SkillOption[]>([]);
+  const [skillOptions, setSkillOptions] = useState<Option[]>([]);
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
   const [aiDraft, setAiDraft] = useState<AiProfilePreview | null>(null);
   const [isImageUploading, setIsImageUploading] = useState(false);
@@ -126,7 +127,7 @@ export default function Register() {
         .map((skill) =>
           skillOptions.find((option) => option.id === skill.skill_id),
         )
-        .filter((skill): skill is SkillOption => Boolean(skill)),
+        .filter((skill): skill is Option => Boolean(skill)),
     [selectedSkills, skillOptions],
   );
 
@@ -187,7 +188,7 @@ export default function Register() {
     );
     replaceExperiences(
       form.experiences.map((experience) => ({
-        id: UUID()(),
+        id: UUID(),
         profile_id: "",
         company_name: experience.company_name,
         company_location: experience.company_location,
@@ -201,7 +202,7 @@ export default function Register() {
     );
     replaceReferences(
       form.references.map((reference) => ({
-        id: UUID()(),
+        id: UUID(),
         profile_id: "",
         first_name: reference.first_name,
         last_name: reference.last_name,
@@ -296,7 +297,7 @@ export default function Register() {
     }
   }
 
-  function handleSkillSelection(nextSelectedSkills: SkillOption[]) {
+  function handleSkillSelection(nextSelectedSkills: Option[]) {
     const currentSkills = getValues("skills");
     const currentSkillMap = new Map(
       currentSkills.map((skill) => [skill.skill_id, skill]),
@@ -629,11 +630,14 @@ export default function Register() {
                   control={control}
                   name="skills"
                   render={() => (
-                    <SkillsDropdown
+                    <Dropdown
                       options={skillOptions}
                       value={selectedSkillOptions}
                       onChange={handleSkillSelection}
                       placeholder={t("registerFlow.skillsPlaceholder")}
+                      handleQuery={async (query: string) =>
+                        await getSkillsSearch(query)
+                      }
                     />
                   )}
                 />
