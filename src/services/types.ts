@@ -10,3 +10,19 @@ export type NotificationItem = {
   created_at: string;
   type: string;
 };
+
+export type IJob = {
+  title: string,
+  company_id: string | [],
+  suitability_rate: string | number,
+  advertiser_id?: string,
+  description: string,
+}
+export type IJobPayload = {
+  title: string,
+  company_id: { id: string, name: string }[],
+  suitability_rate: string | number,
+  advertiser_id?: string,
+  description: string,
+
+}

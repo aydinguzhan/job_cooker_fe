@@ -23,6 +23,7 @@ import {
 } from "../../components/profile/profile-form.utils";
 import { useTranslation } from "../../lang/useTranslation";
 import { setAccessToken } from "../../lib/auth";
+import { UUID } from "../../lib/utils";
 import { login, registerUser } from "../../services/auth.service";
 import {
   resolveFileUrl,
@@ -187,7 +188,7 @@ export default function Register() {
     );
     replaceExperiences(
       form.experiences.map((experience) => ({
-        id: UUID()(),
+        id: UUID(),
         profile_id: "",
         company_name: experience.company_name,
         company_location: experience.company_location,
@@ -201,7 +202,7 @@ export default function Register() {
     );
     replaceReferences(
       form.references.map((reference) => ({
-        id: UUID()(),
+        id: UUID(),
         profile_id: "",
         first_name: reference.first_name,
         last_name: reference.last_name,
