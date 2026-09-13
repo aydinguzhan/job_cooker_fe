@@ -17,11 +17,19 @@ import { useTheme } from "../../theme/useTheme";
 import type { Profile } from "../../types/profile.types";
 import NotificationBell from "./Notification";
 import Button from "../ui/Button";
+import SearchInput from "../ui/SearchInput";
+import { getUserFilter } from "../../services/global.service";
 
 type NavbarProps = {
   onToggleSidebar: () => void;
   toggleQr: () => void;
   isSidebarOpen: boolean;
+};
+
+type IUserFilter = {
+  id: string;
+  first_name: string;
+  last_name: string;
 };
 
 export default function Navbar({
@@ -80,7 +88,34 @@ export default function Navbar({
     logout();
     navigate("/login", { replace: true });
   };
+  const [searchKey, setSearchKey] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  // const [selectUser, setSelectUser] = useState("");
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchKey(value);
 
+    if (!value.trim()) {
+      setSearchResults([]);
+    }
+  };
+  useEffect(() => {
+    // Arama kelimesi boşsa veya sadece boşluktan oluşuyorsa API isteği atmıyoruz
+    if (!searchKey.trim()) return;
+
+    const timer = setTimeout(async () => {
+      try {
+        const res = await getUserFilter(searchKey);
+        console.log(res);
+        setSearchResults(res);
+      } catch (error) {
+        console.error("Arama servisinde hata oluştu:", error);
+        setSearchResults([]);
+      }
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchKey]);
   return (
     <header className="flex h-16 shrink-0 items-center justify-between border-b border-app bg-surface px-6 backdrop-blur-md">
       <div className="flex items-center gap-4">
@@ -103,7 +138,26 @@ export default function Navbar({
           <p className="text-xs text-soft">{t("common.welcomeBack")}</p>
         </div>
       </div>
-
+      <div className="">
+        <SearchInput<IUserFilter>
+          placeholder="Search User..."
+          value={searchKey}
+          onChange={handleSearchChange}
+          searchResult={searchResults}
+          getItemKey={(job) => job.id}
+          onItemSelect={() => {
+            // setSelectUser(user.id);
+            setSearchKey("");
+            setSearchResults([]);
+          }}
+          renderItem={(user) => (
+            <div className="flex flex-col w-full">
+              <span className="font-semibold text-app">{user.first_name}</span>
+              <span className="text-xs text-muted">{user.last_name}</span>
+            </div>
+          )}
+        />
+      </div>
       <div className="flex items-center gap-3">
         <button
           type="button"
