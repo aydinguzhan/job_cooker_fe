@@ -17,6 +17,7 @@ export type IJobInfo = {
     bio: string;
   };
   description: string;
+  url: string;
 };
 type Props = {
   jobInfo: IJobInfo;

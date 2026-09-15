@@ -46,6 +46,9 @@ export default function Jobs({
 
   const handleClick = () => {
     console.log(selectedJobData);
+    if (selectedJobData.company.name === "KARİYER") {
+      window.open(selectedJobData?.url);
+    }
   };
 
   useEffect(() => {
