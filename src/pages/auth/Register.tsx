@@ -3,7 +3,6 @@ import {
   BriefcaseBusiness,
   Loader2,
   Plus,
-  Sparkles,
   Star,
   Trash2,
   UserRound,
@@ -12,7 +11,6 @@ import { useEffect, useMemo, useState } from "react";
 import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import AuthLayout from "../../components/layout/AuthLayout";
-import AiProfileGenerateModal from "../../components/layout/AiProfileGenerateModal";
 import Stepper, { type StepItem } from "../../components/stepper/Stepper";
 import Input from "../../components/ui/Input";
 import SkillsDropdown from "../../components/ui/SkillsDropDown";
@@ -32,7 +30,7 @@ import {
 import { getSkills } from "../../services/global.service";
 import {
   createProfile,
-  generateAiProfile,
+  // generateAiProfile,
 } from "../../services/profile.service";
 import {
   registerOnboardingSchema,
@@ -65,7 +63,7 @@ export default function Register() {
   >("skills");
   const [bootstrappedAuth, setBootstrappedAuth] = useState(false);
   const [skillOptions, setSkillOptions] = useState<SkillOption[]>([]);
-  const [isAiModalOpen, setIsAiModalOpen] = useState(false);
+  // const [isAiModalOpen, setIsAiModalOpen] = useState(false);
   const [aiDraft, setAiDraft] = useState<AiProfilePreview | null>(null);
   const [isImageUploading, setIsImageUploading] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -164,11 +162,11 @@ export default function Register() {
     fetchSkills();
   }, [bootstrappedAuth, skillOptions.length]);
 
-  async function handleGenerateProfile(prompt: string) {
-    const generated = await generateAiProfile(prompt);
-    setAiDraft(generated);
-    return generated;
-  }
+  // async function handleGenerateProfile(prompt: string) {
+  //   const generated = await generateAiProfile(prompt);
+  //   setAiDraft(generated);
+  //   return generated;
+  // }
 
   function applyAiDraft(profile: AiProfilePreview) {
     const { form, unmatchedSkills: unmatched } = mapAiProfileToFormState(
@@ -217,7 +215,7 @@ export default function Register() {
     setActiveProfileSection("skills");
     setUnmatchedSkills(unmatched);
     setAiDraft(profile);
-    setIsAiModalOpen(false);
+    // setIsAiModalOpen(false);
   }
 
   async function ensureAuthenticatedSession() {
@@ -586,20 +584,11 @@ export default function Register() {
               </div>
 
               <div className="flex flex-wrap gap-2">
-                <button
-                  type="button"
-                  onClick={() => setIsAiModalOpen(true)}
-                  className="inline-flex items-center gap-2 rounded-2xl bg-cyan-400 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300"
-                >
-                  <Sparkles className="h-4 w-4" />
-                  {t("registerFlow.aiButton")}
-                </button>
-
                 {aiDraft && (
                   <button
                     type="button"
                     onClick={() => applyAiDraft(aiDraft)}
-                    className="inline-flex items-center gap-2 rounded-2xl border border-white/12 bg-white/[0.05] px-4 py-3 text-sm font-semibold text-slate-100 transition hover:bg-white/[0.1]"
+                    className="inline-flex items-center gap-2 rounded-2xl border border-white/12 bg-white/5 px-4 py-3 text-sm font-semibold text-slate-100 transition hover:bg-white/[0.1]"
                   >
                     {t("registerFlow.aiApply")}
                   </button>
@@ -876,12 +865,12 @@ export default function Register() {
         t("registerFlow.stepProfileTitle"),
       ]}
     >
-      <AiProfileGenerateModal
+      {/*<AiProfileGenerateModal
         open={isAiModalOpen}
         onClose={() => setIsAiModalOpen(false)}
         onGenerate={handleGenerateProfile}
         onUseProfile={applyAiDraft}
-      />
+      />*/}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {submitError && (

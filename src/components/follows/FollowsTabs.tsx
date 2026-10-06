@@ -40,7 +40,7 @@ export default function FollowsTabs({ activeTab, counts, onChange }: Props) {
             key={tab.id}
             type="button"
             onClick={() => onChange(tab.id)}
-            className={`group relative overflow-hidden rounded-[1.75rem] border px-5 py-5 text-left transition duration-200 ${
+            className={`group relative overflow-hidden rounded border px-5 py-5 text-left transition duration-200 ${
               isActive
                 ? "border-cyan-200 bg-[linear-gradient(135deg,rgba(6,182,212,0.14)_0%,var(--surface-elevated)_55%,var(--surface-muted)_100%)] text-app shadow-[0_20px_45px_-28px_rgba(8,145,178,0.45)]"
                 : "border-app bg-surface text-muted hover:border-strong hover:bg-surface-strong"
@@ -48,7 +48,9 @@ export default function FollowsTabs({ activeTab, counts, onChange }: Props) {
           >
             <div
               className={`absolute inset-x-0 top-0 h-1 transition ${
-                isActive ? "bg-cyan-500" : "bg-transparent group-hover:bg-[var(--border-strong)]"
+                isActive
+                  ? "bg-cyan-500"
+                  : "bg-transparent group-hover:bg-(--border-strong)"
               }`}
             />
 

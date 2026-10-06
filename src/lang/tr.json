@@ -232,6 +232,9 @@
     "createConversationError": "Yeni konusma baslatilamadi."
   },
   "jobs":{
-    "jobs":"İş Ara"
+    "jobs":"İş Ara",
+    "searchPlaceholder":"İş veya şirket ara...",
+    "noJobsTitle":"Henüz iş ilanı yok",
+    "job":"İş"
   }
 }

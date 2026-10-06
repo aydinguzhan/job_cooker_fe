@@ -117,7 +117,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
           toggleQr={toggleQr}
         />
 
-        <main className="min-h-0 flex-1 overflow-y-auto bg-app p-6">
+        <main className="relative z-0 min-h-0 flex-1 overflow-y-auto bg-app p-6">
           {children}
         </main>
       </div>
