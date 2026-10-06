@@ -164,44 +164,13 @@ export default function FollowsPage() {
   return (
     <main className="min-h-screen bg-app px-4 py-6 md:px-8">
       <div className="mx-auto max-w-7xl space-y-6">
-        <section className="overflow-hidden rounded-[2rem] border border-app bg-surface shadow-surface">
-          <div className="bg-[radial-gradient(circle_at_top_right,_rgba(34,211,238,0.28),_transparent_28%),radial-gradient(circle_at_left,_rgba(59,130,246,0.22),_transparent_30%),linear-gradient(135deg,#082f49_0%,#0f172a_58%,#111827_100%)] px-6 py-8 text-white md:px-8">
-            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-200">
-              {t("follows.heroEyebrow")}
-            </p>
-            <h1 className="mt-3 text-3xl font-bold md:text-4xl">
-              {t("follows.heroTitle")}
-            </h1>
-            <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-200">
-              {t("follows.heroDescription")}
-            </p>
+        <FollowsTabs
+          activeTab={activeTab}
+          counts={counts}
+          onChange={setActiveTab}
+        />
 
-            <div className="mt-6 grid gap-3 sm:grid-cols-3">
-              <div className="rounded-[1.5rem] border border-white/10 bg-white/10 px-4 py-4 backdrop-blur">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-100">
-                  {t("follows.suggestions")}
-                </p>
-                <p className="mt-2 text-2xl font-bold text-white">{counts.suggestions}</p>
-              </div>
-              <div className="rounded-[1.5rem] border border-white/10 bg-white/10 px-4 py-4 backdrop-blur">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-100">
-                  {t("follows.followers")}
-                </p>
-                <p className="mt-2 text-2xl font-bold text-white">{counts.followers}</p>
-              </div>
-              <div className="rounded-[1.5rem] border border-white/10 bg-white/10 px-4 py-4 backdrop-blur">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-100">
-                  {t("follows.following")}
-                </p>
-                <p className="mt-2 text-2xl font-bold text-white">{counts.followings}</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <FollowsTabs activeTab={activeTab} counts={counts} onChange={setActiveTab} />
-
-        <section className="rounded-[2rem] border border-app bg-surface p-5 shadow-surface backdrop-blur">
+        <section className="rounded-2xl border border-app bg-surface p-5 shadow-surface backdrop-blur">
           <div className="mb-5 flex flex-col gap-3 border-b border-app pb-5 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-700">
@@ -215,7 +184,7 @@ export default function FollowsPage() {
               </p>
             </div>
 
-            <div className="rounded-2xl bg-surface-muted px-4 py-3 text-sm text-muted ring-1 ring-[var(--border-color)]">
+            <div className="rounded-2xl bg-surface-muted px-4 py-3 text-sm text-muted ring-1 ring-(--border-color)">
               <span className="font-semibold text-app">
                 {t("follows.showingUsers", { count: visibleUsers.length })}
               </span>
@@ -223,57 +192,61 @@ export default function FollowsPage() {
           </div>
 
           <div className="space-y-4">
-          {visibleUsers.length === 0 ? (
-            <>
-              <div className="rounded-[2rem] border border-dashed border-app bg-surface-muted px-6 py-14 text-center shadow-surface">
-                <p className="text-base font-semibold text-app">
-                  {t("follows.emptyTitle")}
-                </p>
-                <p className="mt-2 text-sm text-soft">
-                  {t("follows.emptyDescription")}
-                </p>
-              </div>
-
-              {activeTab !== "suggestions" && fallbackSuggestions.length > 0 && (
-                <div className="space-y-4">
-                  <div className="px-1 pt-2">
-                    <h3 className="text-lg font-semibold text-app">
-                      {t("follows.fallbackTitle")}
-                    </h3>
-                    <p className="mt-1 text-sm text-soft">
-                      {t("follows.fallbackDescription")}
-                    </p>
-                  </div>
-
-                  {fallbackSuggestions.map((user) => (
-                    <FollowUserCard
-                      key={user.id}
-                      user={user}
-                      isPending={pendingUserId === user.id}
-                      actionLabel={t("common.follow")}
-                      actionVariant="follow"
-                      onAction={handleFollow}
-                    />
-                  ))}
+            {visibleUsers.length === 0 ? (
+              <>
+                <div className="rounded-2xl border border-dashed border-app bg-surface-muted px-6 py-14 text-center shadow-surface">
+                  <p className="text-base font-semibold text-app">
+                    {t("follows.emptyTitle")}
+                  </p>
+                  <p className="mt-2 text-sm text-soft">
+                    {t("follows.emptyDescription")}
+                  </p>
                 </div>
-              )}
-            </>
-          ) : (
-            visibleUsers.map((user) => {
-              const isFollowAction = activeTab !== "followings" && !user.is_following;
 
-              return (
-                <FollowUserCard
-                  key={user.id}
-                  user={user}
-                  isPending={pendingUserId === user.id}
-                  actionLabel={isFollowAction ? t("common.follow") : t("common.unfollow")}
-                  actionVariant={isFollowAction ? "follow" : "unfollow"}
-                  onAction={isFollowAction ? handleFollow : handleUnfollow}
-                />
-              );
-            })
-          )}
+                {activeTab !== "suggestions" &&
+                  fallbackSuggestions.length > 0 && (
+                    <div className="space-y-4">
+                      <div className="px-1 pt-2">
+                        <h3 className="text-lg font-semibold text-app">
+                          {t("follows.fallbackTitle")}
+                        </h3>
+                        <p className="mt-1 text-sm text-soft">
+                          {t("follows.fallbackDescription")}
+                        </p>
+                      </div>
+
+                      {fallbackSuggestions.map((user) => (
+                        <FollowUserCard
+                          key={user.id}
+                          user={user}
+                          isPending={pendingUserId === user.id}
+                          actionLabel={t("common.follow")}
+                          actionVariant="follow"
+                          onAction={handleFollow}
+                        />
+                      ))}
+                    </div>
+                  )}
+              </>
+            ) : (
+              visibleUsers.map((user) => {
+                const isFollowAction =
+                  activeTab !== "followings" && !user.is_following;
+
+                return (
+                  <FollowUserCard
+                    key={user.id}
+                    user={user}
+                    isPending={pendingUserId === user.id}
+                    actionLabel={
+                      isFollowAction ? t("common.follow") : t("common.unfollow")
+                    }
+                    actionVariant={isFollowAction ? "follow" : "unfollow"}
+                    onAction={isFollowAction ? handleFollow : handleUnfollow}
+                  />
+                );
+              })
+            )}
           </div>
         </section>
       </div>

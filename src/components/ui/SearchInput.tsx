@@ -23,7 +23,7 @@ export default function SearchInput<T>({
   ...props
 }: InputProps<T>) {
   return (
-    <div className="relative min-w-xl">
+    <div className="relative w-full min-w-0">
       {label && (
         <label className="mb-2 block text-sm font-medium text-muted">
           {label}

@@ -117,7 +117,7 @@ export default function Navbar({
     return () => clearTimeout(timer);
   }, [searchKey]);
   return (
-    <header className="flex h-16 shrink-0 items-center justify-between border-b border-app bg-surface px-6 backdrop-blur-md">
+    <header className="relative z-30 flex h-16 shrink-0 items-center justify-between border-b border-app bg-surface px-6 backdrop-blur-md">
       <div className="flex items-center gap-4">
         <button
           onClick={onToggleSidebar}
@@ -138,7 +138,7 @@ export default function Navbar({
           <p className="text-xs text-soft">{t("common.welcomeBack")}</p>
         </div>
       </div>
-      <div className="">
+      <div className="w-[min(34vw,28rem)] min-w-0">
         <SearchInput<IUserFilter>
           placeholder="Search User..."
           value={searchKey}
@@ -215,7 +215,6 @@ export default function Navbar({
                 initials || <UserRound size={15} />
               )}
             </div>
-
             <ChevronDown
               className={`h-3.5 w-3.5 text-soft transition ${
                 isUserMenuOpen ? "rotate-180" : ""
@@ -224,9 +223,12 @@ export default function Navbar({
           </button>
 
           {isUserMenuOpen ? (
-            <div className="absolute right-0 top-[calc(100%+0.75rem)] z-20 min-w-72 rounded-[1.5rem] border border-app bg-surface p-3 shadow-surface backdrop-blur-xl">
+            <div className="absolute right-0 top-[calc(100%+0.75rem)] z-50 min-w-72 rounded-3xl border border-app bg-surface p-3 shadow-surface backdrop-blur-xl">
               <div className="flex items-center gap-3 rounded-2xl bg-surface-muted px-3 py-3">
-                <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-slate-900 text-sm font-semibold text-white">
+                <div
+                  className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-slate-900 text-sm font-semibold text-white hover:cursor-pointer "
+                  onClick={() => navigate("/profile")}
+                >
                   {imageSrc ? (
                     <img
                       src={imageSrc}
